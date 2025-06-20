@@ -919,6 +919,7 @@ export const ExchangeApp = () => {
 
 // Hero Section with Crypto Exchange Interface
 export const HeroSection = ({ setCurrentPage, setOrderData }) => {
+  const { t } = useLanguage();
   const [sendCurrency, setSendCurrency] = useState('BTC');
   const [receiveCurrency, setReceiveCurrency] = useState('BUSIMATCH');
   const [sendAmount, setSendAmount] = useState('');
