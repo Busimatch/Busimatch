@@ -257,7 +257,7 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
   const handleSendAmountChange = (value) => {
     setSendAmount(value);
     if (value && exchangeRate) {
-      const converted = (parseFloat(value) * parseFloat(exchangeRate)).toFixed(8);
+      const converted = (parseFloat(value) * parseFloat(exchangeRate)).toFixed(6);
       setReceiveAmount(converted);
       
       if (cryptoPrices[sendCurrency]) {
