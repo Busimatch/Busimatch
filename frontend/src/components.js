@@ -424,7 +424,7 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-sm font-medium text-blue-400">Receive</label>
-                <span className="text-sm text-blue-400">Ripple</span>
+                <span className="text-sm text-blue-400">{receiveCurrency}</span>
               </div>
               <div className="space-y-3">
                 <input 
@@ -444,7 +444,14 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
               </div>
               {receiveAmount && (
                 <div className="mt-2 text-sm text-gray-400">
-                  ≈ $2135.81
+                  {(() => {
+                    const receiveCrypto = cryptocurrencies.find(c => c.symbol === receiveCurrency);
+                    if (receiveCrypto && receiveAmount) {
+                      const usdValue = (parseFloat(receiveAmount) * receiveCrypto.price).toFixed(2);
+                      return `≈ $${usdValue}`;
+                    }
+                    return '';
+                  })()}
                 </div>
               )}
             </div>
