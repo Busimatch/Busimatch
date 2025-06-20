@@ -753,6 +753,20 @@ export const LanguageProvider = ({ children }) => {
 // Header Component
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+  const { currentLanguage, setCurrentLanguage, t } = useLanguage();
+
+  const languages = [
+    { code: 'en', name: 'English', flag: '🇺🇸' },
+    { code: 'es', name: 'Español', flag: '🇪🇸' },
+    { code: 'fr', name: 'Français', flag: '🇫🇷' },
+    { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+    { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
+    { code: 'it', name: 'Italiano', flag: '🇮🇹' },
+    { code: 'ar', name: 'العربية', flag: '🇸🇦' }
+  ];
+
+  const currentLang = languages.find(lang => lang.code === currentLanguage) || languages[0];
 
   return (
     <header className="absolute top-0 left-0 right-0 z-50 bg-opacity-20 backdrop-blur-sm">
@@ -768,23 +782,58 @@ export const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#" className="text-gray-300 hover:text-white transition-colors">About</a>
-            <a href="#" className="text-gray-300 hover:text-white transition-colors">Blog</a>
-            <a href="#" className="text-gray-300 hover:text-white transition-colors">FAQ</a>
-            <a href="#" className="text-gray-300 hover:text-white transition-colors">API</a>
-            <a href="#" className="text-gray-300 hover:text-white transition-colors">Support</a>
+            <a href="#" className="text-gray-300 hover:text-white transition-colors">{t('about')}</a>
+            <a href="#" className="text-gray-300 hover:text-white transition-colors">{t('blog')}</a>
+            <a href="#" className="text-gray-300 hover:text-white transition-colors">{t('faq')}</a>
+            <a href="#" className="text-gray-300 hover:text-white transition-colors">{t('api')}</a>
+            <a href="#" className="text-gray-300 hover:text-white transition-colors">{t('support')}</a>
             <div className="flex items-center space-x-4">
-              <button className="text-gray-300 hover:text-white transition-colors">
-                🇬🇧
-              </button>
+              {/* Language Selector */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
+                  className="text-gray-300 hover:text-white transition-colors flex items-center space-x-1"
+                >
+                  <span className="text-lg">{currentLang.flag}</span>
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+                
+                <AnimatePresence>
+                  {showLanguageDropdown && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="absolute top-full right-0 mt-2 bg-gray-800 border border-gray-600 rounded-lg shadow-lg min-w-[180px] z-50"
+                    >
+                      {languages.map((language) => (
+                        <button
+                          key={language.code}
+                          onClick={() => {
+                            setCurrentLanguage(language.code);
+                            setShowLanguageDropdown(false);
+                          }}
+                          className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-700 transition-colors flex items-center space-x-3 ${
+                            currentLanguage === language.code ? 'bg-gray-700 text-blue-400' : 'text-gray-300'
+                          }`}
+                        >
+                          <span className="text-lg">{language.flag}</span>
+                          <span>{language.name}</span>
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+              
               <button className="text-gray-300 hover:text-white transition-colors">
                 🌙
               </button>
               <button className="text-gray-300 hover:text-white transition-colors">
-                Sign in
+                {t('signIn')}
               </button>
               <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
-                Sign up
+                {t('signUp')}
               </button>
             </div>
           </nav>
@@ -808,17 +857,39 @@ export const Header = () => {
               className="md:hidden bg-gray-900 bg-opacity-95 rounded-lg p-4 mb-4"
             >
               <nav className="flex flex-col space-y-4">
-                <a href="#" className="text-gray-300 hover:text-white transition-colors">About</a>
-                <a href="#" className="text-gray-300 hover:text-white transition-colors">Blog</a>
-                <a href="#" className="text-gray-300 hover:text-white transition-colors">FAQ</a>
-                <a href="#" className="text-gray-300 hover:text-white transition-colors">API</a>
-                <a href="#" className="text-gray-300 hover:text-white transition-colors">Support</a>
+                <a href="#" className="text-gray-300 hover:text-white transition-colors">{t('about')}</a>
+                <a href="#" className="text-gray-300 hover:text-white transition-colors">{t('blog')}</a>
+                <a href="#" className="text-gray-300 hover:text-white transition-colors">{t('faq')}</a>
+                <a href="#" className="text-gray-300 hover:text-white transition-colors">{t('api')}</a>
+                <a href="#" className="text-gray-300 hover:text-white transition-colors">{t('support')}</a>
+                
+                {/* Mobile Language Selector */}
+                <div className="pt-4 border-t border-gray-700">
+                  <div className="grid grid-cols-2 gap-2">
+                    {languages.map((language) => (
+                      <button
+                        key={language.code}
+                        onClick={() => {
+                          setCurrentLanguage(language.code);
+                          setIsOpen(false);
+                        }}
+                        className={`text-left px-3 py-2 text-sm rounded hover:bg-gray-700 transition-colors flex items-center space-x-2 ${
+                          currentLanguage === language.code ? 'bg-gray-700 text-blue-400' : 'text-gray-300'
+                        }`}
+                      >
+                        <span>{language.flag}</span>
+                        <span className="text-xs">{language.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                
                 <div className="flex flex-col space-y-2 pt-4 border-t border-gray-700">
                   <button className="text-left text-gray-300 hover:text-white transition-colors">
-                    Sign in
+                    {t('signIn')}
                   </button>
                   <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors text-left">
-                    Sign up
+                    {t('signUp')}
                   </button>
                 </div>
               </nav>
