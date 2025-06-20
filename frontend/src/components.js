@@ -474,14 +474,19 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
                   label="Send"
                 />
               </div>
-              {sendAmount && exchangeRate && (
+              {sendAmount && exchangeRate && cryptoPrices[sendCurrency] && cryptoPrices[receiveCurrency] && (
                 <div className="mt-2 text-sm text-gray-400">
-                  1 {sendCurrency} = {(1 * parseFloat(exchangeRate)).toFixed(6)} {receiveCurrency}
+                  1 {sendCurrency} = {parseFloat(exchangeRate).toFixed(8)} {receiveCurrency}
                 </div>
               )}
               {priceUSD && (
                 <div className="mt-1 text-sm text-green-400">
                   ≈ ${priceUSD}
+                </div>
+              )}
+              {loading && (
+                <div className="mt-1 text-sm text-yellow-400">
+                  Updating prices...
                 </div>
               )}
             </div>
