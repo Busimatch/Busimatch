@@ -1223,23 +1223,25 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <motion.h1 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-3xl md:text-5xl font-bold text-white mb-6 relative z-20"
-        >
-          {t('heroTitle')}
-        </motion.h1>
+        <div className="bg-black bg-opacity-20 backdrop-blur-sm rounded-3xl p-8 mb-8">
+          <motion.h1 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-3xl md:text-5xl font-bold text-white mb-6"
+          >
+            {t('heroTitle')}
+          </motion.h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-lg md:text-xl text-gray-200 mb-12 relative z-20"
-        >
-          {t('heroSubtitle')}
-        </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-lg md:text-xl text-gray-100 mb-8"
+          >
+            {t('heroSubtitle')}
+          </motion.p>
+        </div>
 
         {/* Crypto Exchange Interface */}
         <motion.div 
