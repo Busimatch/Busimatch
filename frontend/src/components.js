@@ -590,13 +590,15 @@ export const OrderTrackingPage = ({ orderData, setCurrentPage }) => {
                     </div>
                   </div>
                   <div className="text-sm text-gray-400 mt-2">
-                    The exchange rate will be fixed after receiving <span className="text-white">{orderData.networkConfirmations} network confirmations</span>.
+                    Send your <span className="text-orange-400">{orderData.sendCurrency}</span> to this address. After receiving{' '}
+                    <span className="text-white">{orderData.networkConfirmations} network confirmations</span>, we will automatically convert and send{' '}
+                    <span className="text-blue-400">{orderData.receiveAmount} {orderData.receiveCurrency}</span> to your destination address.
                   </div>
                 </div>
 
                 {/* Receiving Address */}
                 <div>
-                  <div className="text-sm text-gray-400 mb-2">Receiving address XRP</div>
+                  <div className="text-sm text-gray-400 mb-2">Your {orderData.receiveCurrency} will be sent to</div>
                   <div className="bg-gray-700 rounded-lg p-4">
                     <div className="flex items-center justify-between">
                       <code className="text-blue-400 text-sm">{orderData.destinationAddress}</code>
