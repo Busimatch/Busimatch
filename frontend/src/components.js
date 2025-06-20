@@ -1,3 +1,34 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  ArrowRight, 
+  ArrowUpDown,
+  Star, 
+  Users, 
+  Zap, 
+  DollarSign, 
+  Clock, 
+  CheckCircle,
+  ChevronDown,
+  Search,
+  Wallet,
+  Shield,
+  Heart,
+  MessageCircle,
+  Settings,
+  Menu,
+  X,
+  Copy,
+  ExternalLink,
+  TrendingUp,
+  Globe,
+  QrCode,
+  Download,
+  RefreshCw,
+  AlertCircle,
+  Hourglass
+} from 'lucide-react';
+
 // Language translations
 const translations = {
   en: {
