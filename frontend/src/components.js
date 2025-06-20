@@ -549,7 +549,7 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
             <label className="block text-sm font-medium text-gray-300 mb-2">Destination</label>
             <input 
               type="text"
-              placeholder="Your Ripple address"
+              placeholder={`Paste here your address where we have to send your ${receiveCurrency}`}
               className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
