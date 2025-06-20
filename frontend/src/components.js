@@ -197,34 +197,42 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
   };
 
   const handleExchange = () => {
+    const sendCrypto = cryptocurrencies.find(c => c.symbol === sendCurrency);
     const order = {
       id: 'FB9A34',
       sendAmount,
       sendCurrency,
-      receiveAmount: receiveAmount || (parseFloat(sendAmount) * 1.95).toFixed(6),
+      receiveAmount: receiveAmount || (parseFloat(sendAmount) * parseFloat(exchangeRate)).toFixed(6),
       receiveCurrency,
       status: 'awaiting_deposit',
       createdAt: new Date().toLocaleString(),
-      receivingAddress: generateAddress(sendCurrency),
-      destinationAddress: 'rJQrESwxf2BfkGIfSXwDi7Kb9rU48ei',
-      exchangeRate: '1.95',
-      networkConfirmations: 1
+      // Generate address for the currency they want to SEND (not receive)
+      receivingAddress: generateSendAddress(sendCurrency),
+      destinationAddress: 'rJQrESwxf2BfkGhfSXwDi7Kb9rU48ei',
+      exchangeRate: exchangeRate,
+      networkConfirmations: 1,
+      priceUSD: priceUSD
     };
     setOrderData(order);
     setCurrentPage('order');
   };
 
-  const generateAddress = (currency) => {
+  // Generate address for the currency user wants to SEND
+  const generateSendAddress = (currency) => {
     const addresses = {
       'BTC': 'bc1qa46gek8s76v3652vx70xk6nlx7us7meln30vgl',
       'ETH': '0x742d35Cc6C3D1d5D9bF5c8f8A5e2F3a1B2c4d5e6',
       'SOL': '8s9KQrXzBfkGhfSXwDj8Kb0rU49fi2nL4pO1q3R7sTuV',
       'BNB': 'bnb1qa46gek8s76v3652vx70xk6nlx7us7meln30vgl',
       'USDT': '0x852c47Dd7C3D1d6D9bF6c9f9A6e3F4a2B3c5d6e7',
+      'USDT_TRC20': 'TQrESwxfZBfkGhfSXwDj7Kb9rU48eiNmLp',
       'XRP': 'rJQrESwxfZBfkGhfSXwDj7Kb9rU48ei',
       'ADA': 'addr1qa46gek8s76v3652vx70xk6nlx7us7meln30vgl9k2m',
       'MATIC': '0x963d58Ee8C4D2d7D0bF7c0f0A7e4F5a3B4c6d7e8',
-      'AVAX': 'X-avax1qa46gek8s76v3652vx70xk6nlx7us7meln30vgl'
+      'AVAX': 'X-avax1qa46gek8s76v3652vx70xk6nlx7us7meln30vgl',
+      'LTC': 'ltc1qa46gek8s76v3652vx70xk6nlx7us7meln30vgl',
+      'MONERO': '46Gek8s76v3652vx70xk6nlx7us7meln30vglK2mN8pLqR',
+      'BUSIMATCH': '0xBUS1match742d35Cc6C3D1d5D9bF5c8f8A5e2F3a1'
     };
     return addresses[currency] || 'generated_address_' + Math.random().toString(36).substr(2, 9);
   };
