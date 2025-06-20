@@ -215,7 +215,7 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
         'MATIC': 0.82,
         'AVAX': 26.40,
         'LTC': 72.80,
-        'BUSIMATCH': 0.85
+        'BUSIMATCH': 1.00
       };
       setCryptoPrices(fallbackPrices);
     } finally {
