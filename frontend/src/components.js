@@ -1,33 +1,723 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ArrowRight, 
-  ArrowUpDown,
-  Star, 
-  Users, 
-  Zap, 
-  DollarSign, 
-  Clock, 
-  CheckCircle,
-  ChevronDown,
-  Search,
-  Wallet,
-  Shield,
-  Heart,
-  MessageCircle,
-  Settings,
-  Menu,
-  X,
-  Copy,
-  ExternalLink,
-  TrendingUp,
-  Globe,
-  QrCode,
-  Download,
-  RefreshCw,
-  AlertCircle,
-  Hourglass
-} from 'lucide-react';
+// Language translations
+const translations = {
+  en: {
+    // Header
+    about: "About",
+    blog: "Blog",
+    faq: "FAQ",
+    api: "API", 
+    support: "Support",
+    signIn: "Sign in",
+    signUp: "Sign up",
+    
+    // Hero section
+    heroTitle: "Lightning cryptocurrency exchange",
+    heroSubtitle: "Instant Busimatch swaps with Lightning Network! Best rates and large volumes of currencies.",
+    send: "Send",
+    receive: "Receive",
+    destination: "Destination",
+    destinationPlaceholder: "Paste here your address where we have to send your",
+    fixedRate: "Fixed rate (1.0%)",
+    floatRate: "Float rate (0.5%)",
+    exchangeNow: "Exchange now",
+    termsText: "By using the site and creating an exchange, you agree to the",
+    termsOfService: "Terms of Service",
+    and: "and",
+    privacyPolicy: "Privacy Policy",
+    
+    // Features
+    trustedSince: "Trusted since 2018",
+    saveTime: "Save time",
+    saveTimeDesc: "Maximum exchange speed due to full automation",
+    makeExchange: "Make an exchange", 
+    makeExchangeDesc: "Pick the right strategy and make favourable trades",
+    saveMoney: "Save money",
+    saveMoneyDesc: "Best exchange rates and minimum commissions",
+    
+    // Recent transactions
+    recentTransactions: "Recent transactions",
+    
+    // FAQ
+    faqTitle: "FAQ",
+    faq1Q: "How can I track my order?",
+    faq1A: "In three ways: by email, on our website, or by viewing the transactions in the blockchain explorer.",
+    faq2Q: "Why can I trust you?",
+    faq2A: "No registration and no need to share your personal details. We don't hold your funds, all exchanges take place instantly in fully automatic mode.",
+    faq3Q: "Do you have hidden fees?",
+    faq3A: "1% if you opt for a fixed rate, 0.5% if you opt for a floating rate. All fees are transparent and shown upfront.",
+    faq4Q: "What is Busimatch token?",
+    faq4A: "Busimatch is a decentralized cryptocurrency token designed for fast and secure peer-to-peer transactions with low fees and high scalability.",
+    faq5Q: "Which wallets are supported?",
+    faq5A: "We support MetaMask, WalletConnect, Coinbase Wallet, Trust Wallet, and most other popular cryptocurrency wallets for sending and receiving cryptocurrencies.",
+    
+    // News
+    latestNews: "Latest News",
+    allNews: "All news",
+    news1Title: "Busimatch Token Launches on Lightning Network",
+    news1Excerpt: "Enhanced transaction speeds and reduced fees with Lightning Network integration for Busimatch token...",
+    news2Title: "New DEX Features: Advanced Trading Tools", 
+    news2Excerpt: "We're introducing limit orders, stop-loss features, and advanced charting tools for better trading experience...",
+    readMore: "Read more",
+    
+    // Guides
+    guidesTitle: "Guides and tutorials",
+    readAll: "Read all",
+    guide1Title: "Types of cryptocurrency wallets",
+    guide1Excerpt: "Learn about different types of crypto wallets and how to choose the right one for storing your coins.",
+    guide2Title: "How to exchange cryptocurrencies on Busimatch",
+    guide2Excerpt: "Step-by-step guide to making your first cryptocurrency exchange on our platform safely and efficiently.",
+    guide3Title: "Understanding DeFi and DEX trading",
+    guide3Excerpt: "Complete guide to decentralized finance and how decentralized exchanges work in the crypto ecosystem.",
+    guide4Title: "Crypto security best practices",
+    guide4Excerpt: "Essential security tips to protect your cryptocurrency assets and avoid common scams and threats.",
+    
+    // Footer
+    followUs: "Follow us",
+    copyright: "© 2018-2025 Busimatch DEX. All rights reserved.",
+    
+    // Order tracking
+    backToExchange: "Back to exchange",
+    youSend: "YOU SEND",
+    youReceive: "YOU RECEIVE",
+    orderId: "Order ID",
+    timeRemaining: "Time remaining",
+    orderType: "Order type",
+    creationTime: "Creation time",
+    sendInstruction: "Send",
+    toAddress: "to the address:",
+    yourTokensWillBeSent: "Your",
+    willBeSentTo: "will be sent to",
+    awaitingDeposit: "Awaiting deposit",
+    awaitingConfirmations: "Awaiting confirmations",
+    performExchange: "Perform exchange",
+    done: "Done",
+    
+    // Currency search
+    searchPlaceholder: "Type a currency or ticker",
+    popularCurrencies: "Popular currencies",
+    allCurrencies: "All currencies",
+    noCurrenciesFound: "No currencies found"
+  },
+  
+  es: {
+    // Header
+    about: "Acerca de",
+    blog: "Blog",
+    faq: "Preguntas frecuentes",
+    api: "API",
+    support: "Soporte",
+    signIn: "Iniciar sesión",
+    signUp: "Registrarse",
+    
+    // Hero section
+    heroTitle: "Intercambio rápido de criptomonedas",
+    heroSubtitle: "¡Intercambios instantáneos de Busimatch con Lightning Network! Mejores tarifas y grandes volúmenes de monedas.",
+    send: "Enviar",
+    receive: "Recibir",
+    destination: "Destino",
+    destinationPlaceholder: "Pega aquí tu dirección donde tenemos que enviar tu",
+    fixedRate: "Tarifa fija (1.0%)",
+    floatRate: "Tarifa flotante (0.5%)",
+    exchangeNow: "Intercambiar ahora",
+    termsText: "Al usar el sitio y crear un intercambio, aceptas los",
+    termsOfService: "Términos de Servicio",
+    and: "y",
+    privacyPolicy: "Política de Privacidad",
+    
+    // Features
+    trustedSince: "Confiable desde 2018",
+    saveTime: "Ahorra tiempo",
+    saveTimeDesc: "Máxima velocidad de intercambio debido a la automatización completa",
+    makeExchange: "Hacer un intercambio",
+    makeExchangeDesc: "Elige la estrategia correcta y haz operaciones favorables",
+    saveMoney: "Ahorra dinero",
+    saveMoneyDesc: "Mejores tipos de cambio y comisiones mínimas",
+    
+    // Recent transactions
+    recentTransactions: "Transacciones recientes",
+    
+    // FAQ
+    faqTitle: "Preguntas frecuentes",
+    faq1Q: "¿Cómo puedo rastrear mi pedido?",
+    faq1A: "De tres maneras: por correo electrónico, en nuestro sitio web, o viendo las transacciones en el explorador de blockchain.",
+    faq2Q: "¿Por qué puedo confiar en ustedes?",
+    faq2A: "Sin registro y sin necesidad de compartir tus datos personales. No retenemos tus fondos, todos los intercambios ocurren instantáneamente en modo completamente automático.",
+    faq3Q: "¿Tienen tarifas ocultas?",
+    faq3A: "1% si optas por una tarifa fija, 0.5% si optas por una tarifa flotante. Todas las tarifas son transparentes y se muestran por adelantado.",
+    faq4Q: "¿Qué es el token Busimatch?",
+    faq4A: "Busimatch es un token de criptomoneda descentralizado diseñado para transacciones peer-to-peer rápidas y seguras con tarifas bajas y alta escalabilidad.",
+    faq5Q: "¿Qué billeteras son compatibles?",
+    faq5A: "Soportamos MetaMask, WalletConnect, Coinbase Wallet, Trust Wallet, y la mayoría de otras billeteras de criptomonedas populares para enviar y recibir criptomonedas.",
+    
+    // News
+    latestNews: "Últimas noticias",
+    allNews: "Todas las noticias",
+    news1Title: "Token Busimatch se lanza en Lightning Network",
+    news1Excerpt: "Velocidades de transacción mejoradas y tarifas reducidas con la integración de Lightning Network para el token Busimatch...",
+    news2Title: "Nuevas características DEX: Herramientas de trading avanzadas",
+    news2Excerpt: "Estamos introduciendo órdenes límite, características de stop-loss, y herramientas de gráficos avanzados para una mejor experiencia de trading...",
+    readMore: "Leer más",
+    
+    // Guides
+    guidesTitle: "Guías y tutoriales",
+    readAll: "Leer todo",
+    guide1Title: "Tipos de billeteras de criptomonedas",
+    guide1Excerpt: "Aprende sobre diferentes tipos de billeteras crypto y cómo elegir la correcta para almacenar tus monedas.",
+    guide2Title: "Cómo intercambiar criptomonedas en Busimatch",
+    guide2Excerpt: "Guía paso a paso para hacer tu primer intercambio de criptomonedas en nuestra plataforma de manera segura y eficiente.",
+    guide3Title: "Entendiendo DeFi y el trading DEX",
+    guide3Excerpt: "Guía completa sobre finanzas descentralizadas y cómo funcionan los intercambios descentralizados en el ecosistema crypto.",
+    guide4Title: "Mejores prácticas de seguridad crypto",
+    guide4Excerpt: "Consejos de seguridad esenciales para proteger tus activos de criptomonedas y evitar estafas y amenazas comunes.",
+    
+    // Footer
+    followUs: "Síguenos",
+    copyright: "© 2018-2025 Busimatch DEX. Todos los derechos reservados.",
+    
+    // Order tracking
+    backToExchange: "Volver al intercambio",
+    youSend: "ENVÍAS",
+    youReceive: "RECIBES",
+    orderId: "ID de pedido",
+    timeRemaining: "Tiempo restante",
+    orderType: "Tipo de pedido",
+    creationTime: "Hora de creación",
+    sendInstruction: "Envía",
+    toAddress: "a la dirección:",
+    yourTokensWillBeSent: "Tu",
+    willBeSentTo: "será enviado a",
+    awaitingDeposit: "Esperando depósito",
+    awaitingConfirmations: "Esperando confirmaciones",
+    performExchange: "Realizar intercambio",
+    done: "Completado",
+    
+    // Currency search
+    searchPlaceholder: "Escribe una moneda o ticker",
+    popularCurrencies: "Monedas populares",
+    allCurrencies: "Todas las monedas",
+    noCurrenciesFound: "No se encontraron monedas"
+  },
+  
+  fr: {
+    // Header
+    about: "À propos",
+    blog: "Blog",
+    faq: "FAQ",
+    api: "API",
+    support: "Support",
+    signIn: "Se connecter",
+    signUp: "S'inscrire",
+    
+    // Hero section
+    heroTitle: "Échange de cryptomonnaies ultrarapide",
+    heroSubtitle: "Échanges instantanés Busimatch avec Lightning Network ! Meilleurs taux et gros volumes de devises.",
+    send: "Envoyer",
+    receive: "Recevoir",
+    destination: "Destination",
+    destinationPlaceholder: "Collez ici votre adresse où nous devons envoyer votre",
+    fixedRate: "Taux fixe (1.0%)",
+    floatRate: "Taux flottant (0.5%)",
+    exchangeNow: "Échanger maintenant",
+    termsText: "En utilisant le site et en créant un échange, vous acceptez les",
+    termsOfService: "Conditions de Service",
+    and: "et",
+    privacyPolicy: "Politique de Confidentialité",
+    
+    // Features
+    trustedSince: "Fiable depuis 2018",
+    saveTime: "Économiser du temps",
+    saveTimeDesc: "Vitesse d'échange maximale grâce à l'automatisation complète",
+    makeExchange: "Faire un échange",
+    makeExchangeDesc: "Choisissez la bonne stratégie et faites des trades favorables",
+    saveMoney: "Économiser de l'argent",
+    saveMoneyDesc: "Meilleurs taux de change et commissions minimales",
+    
+    // Recent transactions
+    recentTransactions: "Transactions récentes",
+    
+    // FAQ
+    faqTitle: "FAQ",
+    faq1Q: "Comment puis-je suivre ma commande ?",
+    faq1A: "De trois façons : par email, sur notre site web, ou en consultant les transactions dans l'explorateur blockchain.",
+    faq2Q: "Pourquoi puis-je vous faire confiance ?",
+    faq2A: "Aucune inscription et pas besoin de partager vos données personnelles. Nous ne détenons pas vos fonds, tous les échanges ont lieu instantanément en mode entièrement automatique.",
+    faq3Q: "Avez-vous des frais cachés ?",
+    faq3A: "1% si vous optez pour un taux fixe, 0.5% si vous optez pour un taux flottant. Tous les frais sont transparents et affichés à l'avance.",
+    faq4Q: "Qu'est-ce que le token Busimatch ?",
+    faq4A: "Busimatch est un token de cryptomonnaie décentralisé conçu pour des transactions peer-to-peer rapides et sécurisées avec de faibles frais et une haute évolutivité.",
+    faq5Q: "Quels portefeuilles sont supportés ?",
+    faq5A: "Nous supportons MetaMask, WalletConnect, Coinbase Wallet, Trust Wallet, et la plupart des autres portefeuilles de cryptomonnaies populaires pour envoyer et recevoir des cryptomonnaies.",
+    
+    // News
+    latestNews: "Dernières nouvelles",
+    allNews: "Toutes les nouvelles",
+    news1Title: "Le Token Busimatch est lancé sur Lightning Network",
+    news1Excerpt: "Vitesses de transaction améliorées et frais réduits avec l'intégration Lightning Network pour le token Busimatch...",
+    news2Title: "Nouvelles fonctionnalités DEX : Outils de trading avancés",
+    news2Excerpt: "Nous introduisons des ordres limites, des fonctionnalités stop-loss, et des outils de graphiques avancés pour une meilleure expérience de trading...",
+    readMore: "Lire plus",
+    
+    // Guides
+    guidesTitle: "Guides et tutoriels",
+    readAll: "Lire tout",
+    guide1Title: "Types de portefeuilles de cryptomonnaies",
+    guide1Excerpt: "Apprenez sur les différents types de portefeuilles crypto et comment choisir le bon pour stocker vos pièces.",
+    guide2Title: "Comment échanger des cryptomonnaies sur Busimatch",
+    guide2Excerpt: "Guide étape par étape pour faire votre premier échange de cryptomonnaies sur notre plateforme de manière sûre et efficace.",
+    guide3Title: "Comprendre DeFi et le trading DEX",
+    guide3Excerpt: "Guide complet sur la finance décentralisée et comment les échanges décentralisés fonctionnent dans l'écosystème crypto.",
+    guide4Title: "Meilleures pratiques de sécurité crypto",
+    guide4Excerpt: "Conseils de sécurité essentiels pour protéger vos actifs de cryptomonnaies et éviter les arnaques et menaces communes.",
+    
+    // Footer
+    followUs: "Suivez-nous",
+    copyright: "© 2018-2025 Busimatch DEX. Tous droits réservés.",
+    
+    // Order tracking
+    backToExchange: "Retour à l'échange",
+    youSend: "VOUS ENVOYEZ",
+    youReceive: "VOUS RECEVEZ",
+    orderId: "ID de commande",
+    timeRemaining: "Temps restant",
+    orderType: "Type de commande",
+    creationTime: "Heure de création",
+    sendInstruction: "Envoyez",
+    toAddress: "à l'adresse :",
+    yourTokensWillBeSent: "Votre",
+    willBeSentTo: "sera envoyé à",
+    awaitingDeposit: "En attente de dépôt",
+    awaitingConfirmations: "En attente de confirmations",
+    performExchange: "Effectuer l'échange",
+    done: "Terminé",
+    
+    // Currency search
+    searchPlaceholder: "Tapez une devise ou ticker",
+    popularCurrencies: "Devises populaires",
+    allCurrencies: "Toutes les devises",
+    noCurrenciesFound: "Aucune devise trouvée"
+  },
+  
+  de: {
+    // Header
+    about: "Über uns",
+    blog: "Blog",
+    faq: "FAQ",
+    api: "API",
+    support: "Support",
+    signIn: "Anmelden",
+    signUp: "Registrieren",
+    
+    // Hero section
+    heroTitle: "Blitzschneller Kryptowährungsaustausch",
+    heroSubtitle: "Sofortige Busimatch-Tausche mit Lightning Network! Beste Kurse und große Volumen von Währungen.",
+    send: "Senden",
+    receive: "Empfangen",
+    destination: "Ziel",
+    destinationPlaceholder: "Fügen Sie hier Ihre Adresse ein, an die wir Ihre",
+    fixedRate: "Fester Kurs (1.0%)",
+    floatRate: "Variabler Kurs (0.5%)",
+    exchangeNow: "Jetzt tauschen",
+    termsText: "Durch die Nutzung der Website und das Erstellen eines Tauschs stimmen Sie den",
+    termsOfService: "Nutzungsbedingungen",
+    and: "und",
+    privacyPolicy: "Datenschutzrichtlinie",
+    
+    // Features
+    trustedSince: "Vertrauenswürdig seit 2018",
+    saveTime: "Zeit sparen",
+    saveTimeDesc: "Maximale Tauschgeschwindigkeit durch vollständige Automatisierung",
+    makeExchange: "Einen Tausch machen",
+    makeExchangeDesc: "Wählen Sie die richtige Strategie und machen Sie günstige Trades",
+    saveMoney: "Geld sparen",
+    saveMoneyDesc: "Beste Wechselkurse und minimale Provisionen",
+    
+    // Recent transactions
+    recentTransactions: "Letzte Transaktionen",
+    
+    // FAQ
+    faqTitle: "FAQ",
+    faq1Q: "Wie kann ich meine Bestellung verfolgen?",
+    faq1A: "Auf drei Wegen: per E-Mail, auf unserer Website oder durch Anzeigen der Transaktionen im Blockchain-Explorer.",
+    faq2Q: "Warum kann ich Ihnen vertrauen?",
+    faq2A: "Keine Registrierung und keine Notwendigkeit, Ihre persönlichen Daten zu teilen. Wir halten Ihre Gelder nicht, alle Tausche finden sofort im vollautomatischen Modus statt.",
+    faq3Q: "Haben Sie versteckte Gebühren?",
+    faq3A: "1% wenn Sie sich für einen festen Kurs entscheiden, 0,5% wenn Sie sich für einen variablen Kurs entscheiden. Alle Gebühren sind transparent und werden im Voraus angezeigt.",
+    faq4Q: "Was ist der Busimatch-Token?",
+    faq4A: "Busimatch ist ein dezentraler Kryptowährungs-Token, der für schnelle und sichere Peer-to-Peer-Transaktionen mit niedrigen Gebühren und hoher Skalierbarkeit entwickelt wurde.",
+    faq5Q: "Welche Wallets werden unterstützt?",
+    faq5A: "Wir unterstützen MetaMask, WalletConnect, Coinbase Wallet, Trust Wallet und die meisten anderen beliebten Kryptowährungs-Wallets zum Senden und Empfangen von Kryptowährungen.",
+    
+    // News
+    latestNews: "Neueste Nachrichten",
+    allNews: "Alle Nachrichten",
+    news1Title: "Busimatch Token startet auf Lightning Network",
+    news1Excerpt: "Verbesserte Transaktionsgeschwindigkeiten und reduzierte Gebühren mit Lightning Network-Integration für Busimatch Token...",
+    news2Title: "Neue DEX-Features: Erweiterte Trading-Tools",
+    news2Excerpt: "Wir führen Limit-Orders, Stop-Loss-Features und erweiterte Charting-Tools für eine bessere Trading-Erfahrung ein...",
+    readMore: "Mehr lesen",
+    
+    // Guides
+    guidesTitle: "Anleitungen und Tutorials",
+    readAll: "Alle lesen",
+    guide1Title: "Arten von Kryptowährungs-Wallets",
+    guide1Excerpt: "Lernen Sie über verschiedene Arten von Crypto-Wallets und wie Sie das richtige zum Speichern Ihrer Münzen wählen.",
+    guide2Title: "Wie man Kryptowährungen auf Busimatch tauscht",
+    guide2Excerpt: "Schritt-für-Schritt-Anleitung für Ihren ersten Kryptowährungstausch auf unserer Plattform sicher und effizient.",
+    guide3Title: "DeFi und DEX-Trading verstehen",
+    guide3Excerpt: "Vollständige Anleitung zu dezentralen Finanzen und wie dezentrale Börsen im Krypto-Ökosystem funktionieren.",
+    guide4Title: "Crypto-Sicherheits-Best-Practices",
+    guide4Excerpt: "Wesentliche Sicherheitstipps zum Schutz Ihrer Kryptowährungs-Assets und zur Vermeidung häufiger Betrug und Bedrohungen.",
+    
+    // Footer
+    followUs: "Folgen Sie uns",
+    copyright: "© 2018-2025 Busimatch DEX. Alle Rechte vorbehalten.",
+    
+    // Order tracking
+    backToExchange: "Zurück zum Tausch",
+    youSend: "SIE SENDEN",
+    youReceive: "SIE ERHALTEN",
+    orderId: "Bestell-ID",
+    timeRemaining: "Verbleibende Zeit",
+    orderType: "Bestelltyp",
+    creationTime: "Erstellungszeit",
+    sendInstruction: "Senden Sie",
+    toAddress: "an die Adresse:",
+    yourTokensWillBeSent: "Ihre",
+    willBeSentTo: "wird gesendet an",
+    awaitingDeposit: "Warten auf Einzahlung",
+    awaitingConfirmations: "Warten auf Bestätigungen",
+    performExchange: "Tausch durchführen",
+    done: "Fertig",
+    
+    // Currency search
+    searchPlaceholder: "Währung oder Ticker eingeben",
+    popularCurrencies: "Beliebte Währungen",
+    allCurrencies: "Alle Währungen",
+    noCurrenciesFound: "Keine Währungen gefunden"
+  },
+  
+  nl: {
+    // Header
+    about: "Over ons",
+    blog: "Blog",
+    faq: "Veelgestelde vragen",
+    api: "API",
+    support: "Ondersteuning",
+    signIn: "Inloggen",
+    signUp: "Registreren",
+    
+    // Hero section
+    heroTitle: "Bliksemsnelle cryptocurrency-uitwisseling",
+    heroSubtitle: "Directe Busimatch-ruil met Lightning Network! Beste tarieven en grote volumes van valuta's.",
+    send: "Versturen",
+    receive: "Ontvangen",
+    destination: "Bestemming",
+    destinationPlaceholder: "Plak hier uw adres waar we uw",
+    fixedRate: "Vast tarief (1.0%)",
+    floatRate: "Variabel tarief (0.5%)",
+    exchangeNow: "Nu uitwisselen",
+    termsText: "Door gebruik te maken van de site en het maken van een uitwisseling, gaat u akkoord met de",
+    termsOfService: "Servicevoorwaarden",
+    and: "en",
+    privacyPolicy: "Privacybeleid",
+    
+    // Features
+    trustedSince: "Vertrouwd sinds 2018",
+    saveTime: "Tijd besparen",
+    saveTimeDesc: "Maximale uitwisselingssnelheid door volledige automatisering",
+    makeExchange: "Een uitwisseling maken",
+    makeExchangeDesc: "Kies de juiste strategie en maak gunstige trades",
+    saveMoney: "Geld besparen",
+    saveMoneyDesc: "Beste wisselkoersen en minimale commissies",
+    
+    // Recent transactions
+    recentTransactions: "Recente transacties",
+    
+    // FAQ
+    faqTitle: "Veelgestelde vragen",
+    faq1Q: "Hoe kan ik mijn bestelling volgen?",
+    faq1A: "Op drie manieren: per e-mail, op onze website, of door de transacties te bekijken in de blockchain explorer.",
+    faq2Q: "Waarom kan ik jullie vertrouwen?",
+    faq2A: "Geen registratie en geen behoefte om uw persoonlijke gegevens te delen. We houden uw fondsen niet vast, alle uitwisselingen vinden onmiddellijk plaats in volledig automatische modus.",
+    faq3Q: "Hebben jullie verborgen kosten?",
+    faq3A: "1% als u kiest voor een vast tarief, 0,5% als u kiest voor een variabel tarief. Alle kosten zijn transparant en worden vooraf getoond.",
+    faq4Q: "Wat is de Busimatch token?",
+    faq4A: "Busimatch is een gedecentraliseerde cryptocurrency token ontworpen voor snelle en veilige peer-to-peer transacties met lage kosten en hoge schaalbaarheid.",
+    faq5Q: "Welke portemonnees worden ondersteund?",
+    faq5A: "We ondersteunen MetaMask, WalletConnect, Coinbase Wallet, Trust Wallet, en de meeste andere populaire cryptocurrency portemonnees voor het verzenden en ontvangen van cryptocurrencies.",
+    
+    // News
+    latestNews: "Laatste nieuws",
+    allNews: "Alle nieuws",
+    news1Title: "Busimatch Token lanceert op Lightning Network",
+    news1Excerpt: "Verbeterde transactiesnelheden en verminderde kosten met Lightning Network integratie voor Busimatch token...",
+    news2Title: "Nieuwe DEX functies: Geavanceerde handelstools",
+    news2Excerpt: "We introduceren limietorders, stop-loss functies, en geavanceerde grafiektools voor een betere handelservaring...",
+    readMore: "Lees meer",
+    
+    // Guides
+    guidesTitle: "Gidsen en tutorials",
+    readAll: "Alles lezen",
+    guide1Title: "Soorten cryptocurrency portemonnees",
+    guide1Excerpt: "Leer over verschillende soorten crypto portemonnees en hoe u de juiste kiest voor het opslaan van uw munten.",
+    guide2Title: "Hoe cryptocurrencies uitwisselen op Busimatch",
+    guide2Excerpt: "Stap-voor-stap gids voor het maken van uw eerste cryptocurrency uitwisseling op ons platform veilig en efficiënt.",
+    guide3Title: "DeFi en DEX handel begrijpen",
+    guide3Excerpt: "Volledige gids over gedecentraliseerde financiën en hoe gedecentraliseerde uitwisselingen werken in het crypto ecosysteem.",
+    guide4Title: "Crypto beveiligings best practices",
+    guide4Excerpt: "Essentiële beveiligingstips om uw cryptocurrency assets te beschermen en veelvoorkomende oplichting en bedreigingen te vermijden.",
+    
+    // Footer
+    followUs: "Volg ons",
+    copyright: "© 2018-2025 Busimatch DEX. Alle rechten voorbehouden.",
+    
+    // Order tracking
+    backToExchange: "Terug naar uitwisseling",
+    youSend: "U VERZENDT",
+    youReceive: "U ONTVANGT",
+    orderId: "Bestelling ID",
+    timeRemaining: "Resterende tijd",
+    orderType: "Bestelling type",
+    creationTime: "Aanmaaktijd",
+    sendInstruction: "Verzend",
+    toAddress: "naar het adres:",
+    yourTokensWillBeSent: "Uw",
+    willBeSentTo: "wordt verzonden naar",
+    awaitingDeposit: "Wachten op storting",
+    awaitingConfirmations: "Wachten op bevestigingen",
+    performExchange: "Uitwisseling uitvoeren",
+    done: "Klaar",
+    
+    // Currency search
+    searchPlaceholder: "Typ een valuta of ticker",
+    popularCurrencies: "Populaire valuta's",
+    allCurrencies: "Alle valuta's",
+    noCurrenciesFound: "Geen valuta's gevonden"
+  },
+  
+  it: {
+    // Header
+    about: "Chi siamo",
+    blog: "Blog",
+    faq: "FAQ",
+    api: "API",
+    support: "Supporto",
+    signIn: "Accedi",
+    signUp: "Registrati",
+    
+    // Hero section
+    heroTitle: "Scambio di criptovalute fulmineo",
+    heroSubtitle: "Scambi istantanei Busimatch con Lightning Network! Migliori tariffe e grandi volumi di valute.",
+    send: "Invia",
+    receive: "Ricevi",
+    destination: "Destinazione",
+    destinationPlaceholder: "Incolla qui il tuo indirizzo dove dobbiamo inviare il tuo",
+    fixedRate: "Tariffa fissa (1.0%)",
+    floatRate: "Tariffa variabile (0.5%)",
+    exchangeNow: "Scambia ora",
+    termsText: "Utilizzando il sito e creando uno scambio, accetti i",
+    termsOfService: "Termini di Servizio",
+    and: "e",
+    privacyPolicy: "Informativa sulla Privacy",
+    
+    // Features
+    trustedSince: "Affidabile dal 2018",
+    saveTime: "Risparmia tempo",
+    saveTimeDesc: "Velocità di scambio massima grazie alla completa automazione",
+    makeExchange: "Fare uno scambio",
+    makeExchangeDesc: "Scegli la strategia giusta e fai operazioni favorevoli",
+    saveMoney: "Risparmia denaro",
+    saveMoneyDesc: "Migliori tassi di cambio e commissioni minime",
+    
+    // Recent transactions
+    recentTransactions: "Transazioni recenti",
+    
+    // FAQ
+    faqTitle: "FAQ",
+    faq1Q: "Come posso tracciare il mio ordine?",
+    faq1A: "In tre modi: per email, sul nostro sito web, o visualizzando le transazioni nell'explorer blockchain.",
+    faq2Q: "Perché posso fidarmi di voi?",
+    faq2A: "Nessuna registrazione e nessun bisogno di condividere i tuoi dati personali. Non teniamo i tuoi fondi, tutti gli scambi avvengono istantaneamente in modalità completamente automatica.",
+    faq3Q: "Avete commissioni nascoste?",
+    faq3A: "1% se opti per una tariffa fissa, 0,5% se opti per una tariffa variabile. Tutte le commissioni sono trasparenti e mostrate in anticipo.",
+    faq4Q: "Cos'è il token Busimatch?",
+    faq4A: "Busimatch è un token di criptovaluta decentralizzato progettato per transazioni peer-to-peer veloci e sicure con commissioni basse e alta scalabilità.",
+    faq5Q: "Quali portafogli sono supportati?",
+    faq5A: "Supportiamo MetaMask, WalletConnect, Coinbase Wallet, Trust Wallet, e la maggior parte degli altri portafogli di criptovalute popolari per inviare e ricevere criptovalute.",
+    
+    // News
+    latestNews: "Ultime notizie",
+    allNews: "Tutte le notizie",
+    news1Title: "Il Token Busimatch viene lanciato su Lightning Network",
+    news1Excerpt: "Velocità di transazione migliorate e commissioni ridotte con l'integrazione Lightning Network per il token Busimatch...",
+    news2Title: "Nuove funzionalità DEX: Strumenti di trading avanzati",
+    news2Excerpt: "Stiamo introducendo ordini limite, funzionalità stop-loss, e strumenti di grafici avanzati per una migliore esperienza di trading...",
+    readMore: "Leggi di più",
+    
+    // Guides
+    guidesTitle: "Guide e tutorial",
+    readAll: "Leggi tutto",
+    guide1Title: "Tipi di portafogli di criptovalute",
+    guide1Excerpt: "Impara sui diversi tipi di portafogli crypto e come scegliere quello giusto per conservare le tue monete.",
+    guide2Title: "Come scambiare criptovalute su Busimatch",
+    guide2Excerpt: "Guida passo-passo per fare il tuo primo scambio di criptovalute sulla nostra piattaforma in modo sicuro ed efficiente.",
+    guide3Title: "Comprendere DeFi e il trading DEX",
+    guide3Excerpt: "Guida completa sulla finanza decentralizzata e come funzionano gli scambi decentralizzati nell'ecosistema crypto.",
+    guide4Title: "Migliori pratiche di sicurezza crypto",
+    guide4Excerpt: "Consigli di sicurezza essenziali per proteggere i tuoi asset di criptovalute ed evitare truffe e minacce comuni.",
+    
+    // Footer
+    followUs: "Seguici",
+    copyright: "© 2018-2025 Busimatch DEX. Tutti i diritti riservati.",
+    
+    // Order tracking
+    backToExchange: "Torna allo scambio",
+    youSend: "INVII",
+    youReceive: "RICEVI",
+    orderId: "ID ordine",
+    timeRemaining: "Tempo rimanente",
+    orderType: "Tipo di ordine",
+    creationTime: "Ora di creazione",
+    sendInstruction: "Invia",
+    toAddress: "all'indirizzo:",
+    yourTokensWillBeSent: "Il tuo",
+    willBeSentTo: "sarà inviato a",
+    awaitingDeposit: "In attesa di deposito",
+    awaitingConfirmations: "In attesa di conferme",
+    performExchange: "Esegui scambio",
+    done: "Fatto",
+    
+    // Currency search
+    searchPlaceholder: "Digita una valuta o ticker",
+    popularCurrencies: "Valute popolari",
+    allCurrencies: "Tutte le valute",
+    noCurrenciesFound: "Nessuna valuta trovata"
+  },
+  
+  ar: {
+    // Header
+    about: "حولنا",
+    blog: "المدونة",
+    faq: "الأسئلة الشائعة",
+    api: "واجهة برمجة التطبيقات",
+    support: "الدعم",
+    signIn: "تسجيل الدخول",
+    signUp: "التسجيل",
+    
+    // Hero section
+    heroTitle: "تبادل العملات المشفرة السريع",
+    heroSubtitle: "مبادلات Busimatch فورية مع شبكة البرق! أفضل الأسعار وحجوم كبيرة من العملات.",
+    send: "إرسال",
+    receive: "استقبال",
+    destination: "الوجهة",
+    destinationPlaceholder: "الصق هنا عنوانك حيث يجب أن نرسل",
+    fixedRate: "سعر ثابت (1.0%)",
+    floatRate: "سعر متغير (0.5%)",
+    exchangeNow: "تبادل الآن",
+    termsText: "باستخدام الموقع وإنشاء تبادل، فإنك توافق على",
+    termsOfService: "شروط الخدمة",
+    and: "و",
+    privacyPolicy: "سياسة الخصوصية",
+    
+    // Features
+    trustedSince: "موثوق منذ 2018",
+    saveTime: "توفير الوقت",
+    saveTimeDesc: "أقصى سرعة تبادل بسبب الأتمتة الكاملة",
+    makeExchange: "القيام بتبادل",
+    makeExchangeDesc: "اختر الاستراتيجية الصحيحة وقم بصفقات مربحة",
+    saveMoney: "توفير المال",
+    saveMoneyDesc: "أفضل أسعار الصرف وأقل عمولات",
+    
+    // Recent transactions
+    recentTransactions: "المعاملات الأخيرة",
+    
+    // FAQ
+    faqTitle: "الأسئلة الشائعة",
+    faq1Q: "كيف يمكنني تتبع طلبي؟",
+    faq1A: "بثلاث طرق: عبر البريد الإلكتروني، على موقعنا، أو بعرض المعاملات في مستكشف البلوك تشين.",
+    faq2Q: "لماذا يمكنني الوثوق بكم؟",
+    faq2A: "لا تسجيل ولا حاجة لمشاركة بياناتك الشخصية. نحن لا نحتفظ بأموالك، جميع التبادلات تحدث فوراً في الوضع التلقائي الكامل.",
+    faq3Q: "هل لديكم رسوم مخفية؟",
+    faq3A: "1% إذا اخترت سعراً ثابتاً، 0.5% إذا اخترت سعراً متغيراً. جميع الرسوم شفافة ومعروضة مسبقاً.",
+    faq4Q: "ما هو رمز Busimatch؟",
+    faq4A: "Busimatch هو رمز عملة مشفرة لامركزي مصمم للمعاملات السريعة والآمنة من نظير إلى نظير مع رسوم منخفضة وقابلية توسع عالية.",
+    faq5Q: "ما هي المحافظ المدعومة؟",
+    faq5A: "نحن ندعم MetaMask و WalletConnect و Coinbase Wallet و Trust Wallet ومعظم محافظ العملات المشفرة الشائعة الأخرى لإرسال واستقبال العملات المشفرة.",
+    
+    // News
+    latestNews: "آخر الأخبار",
+    allNews: "جميع الأخبار",
+    news1Title: "إطلاق رمز Busimatch على شبكة البرق",
+    news1Excerpt: "سرعات معاملات محسنة ورسوم مخفضة مع تكامل شبكة البرق لرمز Busimatch...",
+    news2Title: "ميزات DEX جديدة: أدوات تداول متقدمة",
+    news2Excerpt: "نحن نقدم أوامر الحد وميزات وقف الخسارة وأدوات الرسوم البيانية المتقدمة لتجربة تداول أفضل...",
+    readMore: "اقرأ المزيد",
+    
+    // Guides
+    guidesTitle: "الأدلة والدروس",
+    readAll: "اقرأ الكل",
+    guide1Title: "أنواع محافظ العملات المشفرة",
+    guide1Excerpt: "تعلم عن أنواع مختلفة من محافظ الكريبتو وكيفية اختيار الصحيح لتخزين عملاتك.",
+    guide2Title: "كيفية تبادل العملات المشفرة على Busimatch",
+    guide2Excerpt: "دليل خطوة بخطوة لعمل أول تبادل عملة مشفرة على منصتنا بأمان وكفاءة.",
+    guide3Title: "فهم DeFi وتداول DEX",
+    guide3Excerpt: "دليل شامل حول التمويل اللامركزي وكيف تعمل التبادلات اللامركزية في نظام الكريبتو البيئي.",
+    guide4Title: "أفضل ممارسات أمان الكريبتو",
+    guide4Excerpt: "نصائح أمان أساسية لحماية أصول العملة المشفرة الخاصة بك وتجنب الاحتيال والتهديدات الشائعة.",
+    
+    // Footer
+    followUs: "تابعنا",
+    copyright: "© 2018-2025 Busimatch DEX. جميع الحقوق محفوظة.",
+    
+    // Order tracking
+    backToExchange: "العودة للتبادل",
+    youSend: "أنت ترسل",
+    youReceive: "أنت تستقبل",
+    orderId: "معرف الطلب",
+    timeRemaining: "الوقت المتبقي",
+    orderType: "نوع الطلب",
+    creationTime: "وقت الإنشاء",
+    sendInstruction: "أرسل",
+    toAddress: "إلى العنوان:",
+    yourTokensWillBeSent: "سيتم إرسال",
+    willBeSentTo: "الخاص بك إلى",
+    awaitingDeposit: "في انتظار الإيداع",
+    awaitingConfirmations: "في انتظار التأكيدات",
+    performExchange: "تنفيذ التبادل",
+    done: "تم",
+    
+    // Currency search
+    searchPlaceholder: "اكتب عملة أو رمز",
+    popularCurrencies: "العملات الشائعة",
+    allCurrencies: "جميع العملات",
+    noCurrenciesFound: "لم يتم العثور على عملات"
+  }
+};
+
+// Language context
+const LanguageContext = React.createContext();
+
+export const useLanguage = () => {
+  const context = React.useContext(LanguageContext);
+  if (!context) {
+    throw new Error('useLanguage must be used within a LanguageProvider');
+  }
+  return context;
+};
+
+export const LanguageProvider = ({ children }) => {
+  const [currentLanguage, setCurrentLanguage] = useState('en');
+
+  const t = (key) => {
+    return translations[currentLanguage][key] || translations.en[key] || key;
+  };
+
+  return (
+    <LanguageContext.Provider value={{ currentLanguage, setCurrentLanguage, t }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+};
 
 // Header Component
 export const Header = () => {
