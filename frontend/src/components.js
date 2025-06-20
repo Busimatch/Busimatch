@@ -134,22 +134,58 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showSendDropdown, setShowSendDropdown] = useState(false);
   const [showReceiveDropdown, setShowReceiveDropdown] = useState(false);
+  const [exchangeRate, setExchangeRate] = useState('');
+  const [priceUSD, setPriceUSD] = useState('');
 
   const cryptocurrencies = [
-    { symbol: 'BTC', name: 'Bitcoin', icon: '₿', color: 'text-orange-400' },
-    { symbol: 'BUSIMATCH', name: 'Busimatch Token', icon: '🚀', color: 'text-purple-400' },
-    { symbol: 'ETH', name: 'Ethereum', icon: 'Ξ', color: 'text-blue-400' },
-    { symbol: 'BNB', name: 'BNB Smart Chain (BEP20)', icon: '🔶', color: 'text-yellow-400' },
-    { symbol: 'USDT', name: 'Tether (ERC20)', icon: '₮', color: 'text-green-400' },
-    { symbol: 'USDT_TRC20', name: 'Tether (TRC20)', icon: '₮', color: 'text-green-400' },
-    { symbol: 'SOL', name: 'Solana', icon: '◎', color: 'text-purple-400' },
-    { symbol: 'ADA', name: 'Cardano', icon: '₳', color: 'text-blue-400' },
-    { symbol: 'XRP', name: 'Ripple', icon: '◈', color: 'text-blue-300' },
-    { symbol: 'MATIC', name: 'Polygon', icon: '⬢', color: 'text-purple-400' },
-    { symbol: 'AVAX', name: 'Avalanche', icon: '🔺', color: 'text-red-400' },
-    { symbol: 'LTC', name: 'Litecoin', icon: 'Ł', color: 'text-gray-400' },
-    { symbol: 'MONERO', name: 'Monero', icon: 'ɱ', color: 'text-orange-400' }
+    { symbol: 'BTC', name: 'Bitcoin', icon: '₿', color: 'text-orange-400', price: 48461.40 },
+    { symbol: 'BUSIMATCH', name: 'Busimatch Token', icon: '🚀', color: 'text-purple-400', price: 0.85 },
+    { symbol: 'ETH', name: 'Ethereum', icon: 'Ξ', color: 'text-blue-400', price: 3421.50 },
+    { symbol: 'BNB', name: 'BNB Smart Chain (BEP20)', icon: '🔶', color: 'text-yellow-400', price: 312.80 },
+    { symbol: 'USDT', name: 'Tether (ERC20)', icon: '₮', color: 'text-green-400', price: 1.00 },
+    { symbol: 'USDT_TRC20', name: 'Tether (TRC20)', icon: '₮', color: 'text-green-400', price: 1.00 },
+    { symbol: 'SOL', name: 'Solana', icon: '◎', color: 'text-purple-400', price: 142.60 },
+    { symbol: 'ADA', name: 'Cardano', icon: '₳', color: 'text-blue-400', price: 0.52 },
+    { symbol: 'XRP', name: 'Ripple', icon: '◈', color: 'text-blue-300', price: 0.48 },
+    { symbol: 'MATIC', name: 'Polygon', icon: '⬢', color: 'text-purple-400', price: 0.95 },
+    { symbol: 'AVAX', name: 'Avalanche', icon: '🔺', color: 'text-red-400', price: 28.40 },
+    { symbol: 'LTC', name: 'Litecoin', icon: 'Ł', color: 'text-gray-400', price: 85.20 },
+    { symbol: 'MONERO', name: 'Monero', icon: 'ɱ', color: 'text-orange-400', price: 158.30 }
   ];
+
+  // Calculate exchange rate and amounts
+  useEffect(() => {
+    const sendCrypto = cryptocurrencies.find(c => c.symbol === sendCurrency);
+    const receiveCrypto = cryptocurrencies.find(c => c.symbol === receiveCurrency);
+    
+    if (sendCrypto && receiveCrypto) {
+      const rate = receiveCrypto.price / sendCrypto.price;
+      setExchangeRate(rate.toFixed(6));
+      
+      if (sendAmount) {
+        const converted = (parseFloat(sendAmount) * rate).toFixed(6);
+        setReceiveAmount(converted);
+        setPriceUSD((parseFloat(sendAmount) * sendCrypto.price).toFixed(2));
+      }
+    }
+  }, [sendCurrency, receiveCurrency, sendAmount]);
+
+  // Update receive amount when send amount changes
+  const handleSendAmountChange = (value) => {
+    setSendAmount(value);
+    if (value && exchangeRate) {
+      const converted = (parseFloat(value) * parseFloat(exchangeRate)).toFixed(6);
+      setReceiveAmount(converted);
+      
+      const sendCrypto = cryptocurrencies.find(c => c.symbol === sendCurrency);
+      if (sendCrypto) {
+        setPriceUSD((parseFloat(value) * sendCrypto.price).toFixed(2));
+      }
+    } else {
+      setReceiveAmount('');
+      setPriceUSD('');
+    }
+  };
 
   const swapCurrencies = () => {
     const temp = sendCurrency;
