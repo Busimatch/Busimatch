@@ -237,12 +237,16 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
       const sendPrice = cryptoPrices[sendCurrency];
       const receivePrice = cryptoPrices[receiveCurrency];
       
+      console.log(`Send ${sendCurrency} price: $${sendPrice}`);
+      console.log(`Receive ${receiveCurrency} price: $${receivePrice}`);
+      
       // Correct calculation: how many receive tokens per 1 send token
       const rate = sendPrice / receivePrice;
-      setExchangeRate(rate.toFixed(8));
+      console.log(`Exchange rate: 1 ${sendCurrency} = ${rate} ${receiveCurrency}`);
+      setExchangeRate(rate.toFixed(6));
       
       if (sendAmount) {
-        const converted = (parseFloat(sendAmount) * rate).toFixed(8);
+        const converted = (parseFloat(sendAmount) * rate).toFixed(6);
         setReceiveAmount(converted);
         setPriceUSD((parseFloat(sendAmount) * sendPrice).toFixed(2));
       }
