@@ -8,21 +8,24 @@ import {
   FAQSection, 
   NewsSection, 
   GuidesSection, 
-  Footer 
+  Footer,
+  LanguageProvider
 } from './components';
 
 function App() {
   return (
-    <div className="App">
-      <Header />
-      <ExchangeApp />
-      <FeaturesSection />
-      <RecentTransactions />
-      <FAQSection />
-      <NewsSection />
-      <GuidesSection />
-      <Footer />
-    </div>
+    <LanguageProvider>
+      <div className="App">
+        <Header />
+        <ExchangeApp />
+        <FeaturesSection />
+        <RecentTransactions />
+        <FAQSection />
+        <NewsSection />
+        <GuidesSection />
+        <Footer />
+      </div>
+    </LanguageProvider>
   );
 }
 
