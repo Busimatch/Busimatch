@@ -384,7 +384,7 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
                 <input 
                   type="number"
                   value={sendAmount}
-                  onChange={(e) => setSendAmount(e.target.value)}
+                  onChange={(e) => handleSendAmountChange(e.target.value)}
                   placeholder="0.0206473"
                   className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
@@ -396,9 +396,14 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
                   label="Send"
                 />
               </div>
-              {sendAmount && (
+              {sendAmount && exchangeRate && (
                 <div className="mt-2 text-sm text-gray-400">
-                  1 {sendCurrency} = 48461.401 XRP
+                  1 {sendCurrency} = {(1 * parseFloat(exchangeRate)).toFixed(6)} {receiveCurrency}
+                </div>
+              )}
+              {priceUSD && (
+                <div className="mt-1 text-sm text-green-400">
+                  ≈ ${priceUSD}
                 </div>
               )}
             </div>
