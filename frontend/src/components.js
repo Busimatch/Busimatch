@@ -136,50 +136,128 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
   const [showReceiveDropdown, setShowReceiveDropdown] = useState(false);
   const [exchangeRate, setExchangeRate] = useState('');
   const [priceUSD, setPriceUSD] = useState('');
+  const [cryptoPrices, setCryptoPrices] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const cryptocurrencies = [
-    { symbol: 'BTC', name: 'Bitcoin', icon: '₿', color: 'text-orange-400', price: 48461.40 },
-    { symbol: 'BUSIMATCH', name: 'Busimatch Token', icon: '🚀', color: 'text-purple-400', price: 0.85 },
-    { symbol: 'ETH', name: 'Ethereum', icon: 'Ξ', color: 'text-blue-400', price: 3421.50 },
-    { symbol: 'BNB', name: 'BNB Smart Chain (BEP20)', icon: '🔶', color: 'text-yellow-400', price: 312.80 },
-    { symbol: 'USDT', name: 'Tether (ERC20)', icon: '₮', color: 'text-green-400', price: 1.00 },
-    { symbol: 'USDT_TRC20', name: 'Tether (TRC20)', icon: '₮', color: 'text-green-400', price: 1.00 },
-    { symbol: 'SOL', name: 'Solana', icon: '◎', color: 'text-purple-400', price: 142.60 },
-    { symbol: 'ADA', name: 'Cardano', icon: '₳', color: 'text-blue-400', price: 0.52 },
-    { symbol: 'XRP', name: 'Ripple', icon: '◈', color: 'text-blue-300', price: 0.48 },
-    { symbol: 'MATIC', name: 'Polygon', icon: '⬢', color: 'text-purple-400', price: 0.95 },
-    { symbol: 'AVAX', name: 'Avalanche', icon: '🔺', color: 'text-red-400', price: 28.40 },
-    { symbol: 'LTC', name: 'Litecoin', icon: 'Ł', color: 'text-gray-400', price: 85.20 },
-    { symbol: 'MONERO', name: 'Monero', icon: 'ɱ', color: 'text-orange-400', price: 158.30 }
+    { symbol: 'BTC', name: 'Bitcoin', icon: '₿', color: 'text-orange-400', geckoId: 'bitcoin' },
+    { symbol: 'BUSIMATCH', name: 'Busimatch Token', icon: '🚀', color: 'text-purple-400', geckoId: null, price: 0.85 },
+    { symbol: 'ETH', name: 'Ethereum', icon: 'Ξ', color: 'text-blue-400', geckoId: 'ethereum' },
+    { symbol: 'BNB', name: 'BNB Smart Chain (BEP20)', icon: '🔶', color: 'text-yellow-400', geckoId: 'binancecoin' },
+    { symbol: 'USDT', name: 'Tether (ERC20)', icon: '₮', color: 'text-green-400', geckoId: 'tether' },
+    { symbol: 'USDT_TRC20', name: 'Tether (TRC20)', icon: '₮', color: 'text-green-400', geckoId: 'tether' },
+    { symbol: 'SOL', name: 'Solana', icon: '◎', color: 'text-purple-400', geckoId: 'solana' },
+    { symbol: 'ADA', name: 'Cardano', icon: '₳', color: 'text-blue-400', geckoId: 'cardano' },
+    { symbol: 'XRP', name: 'Ripple', icon: '◈', color: 'text-blue-300', geckoId: 'ripple' },
+    { symbol: 'MATIC', name: 'Polygon', icon: '⬢', color: 'text-purple-400', geckoId: 'matic-network' },
+    { symbol: 'AVAX', name: 'Avalanche', icon: '🔺', color: 'text-red-400', geckoId: 'avalanche-2' },
+    { symbol: 'LTC', name: 'Litecoin', icon: 'Ł', color: 'text-gray-400', geckoId: 'litecoin' },
+    { symbol: 'MONERO', name: 'Monero', icon: 'ɱ', color: 'text-orange-400', geckoId: 'monero' }
   ];
 
-  // Calculate exchange rate and amounts
+  // Fetch real cryptocurrency prices from CoinGecko API
+  const fetchCryptoPrices = async () => {
+    setLoading(true);
+    try {
+      const geckoIds = cryptocurrencies
+        .filter(crypto => crypto.geckoId)
+        .map(crypto => crypto.geckoId)
+        .join(',');
+      
+      const response = await fetch(
+        `https://api.coingecko.com/api/v3/simple/price?ids=${geckoIds}&vs_currencies=usd`
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        const prices = {};
+        
+        cryptocurrencies.forEach(crypto => {
+          if (crypto.geckoId && data[crypto.geckoId]) {
+            prices[crypto.symbol] = data[crypto.geckoId].usd;
+          } else if (crypto.symbol === 'BUSIMATCH') {
+            prices[crypto.symbol] = crypto.price; // Fixed price for BUSIMATCH
+          }
+        });
+        
+        setCryptoPrices(prices);
+      } else {
+        // Fallback to mock prices if API fails
+        console.warn('Failed to fetch real prices, using fallback prices');
+        const fallbackPrices = {
+          'BTC': 43250.00,
+          'ETH': 2580.50,
+          'MONERO': 168.45,
+          'SOL': 95.20,
+          'ADA': 0.48,
+          'XRP': 0.52,
+          'BNB': 285.60,
+          'USDT': 1.00,
+          'MATIC': 0.82,
+          'AVAX': 26.40,
+          'LTC': 72.80,
+          'BUSIMATCH': 0.85
+        };
+        setCryptoPrices(fallbackPrices);
+      }
+    } catch (error) {
+      console.error('Error fetching crypto prices:', error);
+      // Fallback prices
+      const fallbackPrices = {
+        'BTC': 43250.00,
+        'ETH': 2580.50,
+        'MONERO': 168.45,
+        'SOL': 95.20,
+        'ADA': 0.48,
+        'XRP': 0.52,
+        'BNB': 285.60,
+        'USDT': 1.00,
+        'MATIC': 0.82,
+        'AVAX': 26.40,
+        'LTC': 72.80,
+        'BUSIMATCH': 0.85
+      };
+      setCryptoPrices(fallbackPrices);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch prices on component mount
   useEffect(() => {
-    const sendCrypto = cryptocurrencies.find(c => c.symbol === sendCurrency);
-    const receiveCrypto = cryptocurrencies.find(c => c.symbol === receiveCurrency);
-    
-    if (sendCrypto && receiveCrypto) {
-      const rate = receiveCrypto.price / sendCrypto.price;
-      setExchangeRate(rate.toFixed(6));
+    fetchCryptoPrices();
+    // Refresh prices every 30 seconds
+    const interval = setInterval(fetchCryptoPrices, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Calculate exchange rate and amounts with CORRECT calculations
+  useEffect(() => {
+    if (cryptoPrices[sendCurrency] && cryptoPrices[receiveCurrency]) {
+      const sendPrice = cryptoPrices[sendCurrency];
+      const receivePrice = cryptoPrices[receiveCurrency];
+      
+      // Correct calculation: how many receive tokens per 1 send token
+      const rate = sendPrice / receivePrice;
+      setExchangeRate(rate.toFixed(8));
       
       if (sendAmount) {
-        const converted = (parseFloat(sendAmount) * rate).toFixed(6);
+        const converted = (parseFloat(sendAmount) * rate).toFixed(8);
         setReceiveAmount(converted);
-        setPriceUSD((parseFloat(sendAmount) * sendCrypto.price).toFixed(2));
+        setPriceUSD((parseFloat(sendAmount) * sendPrice).toFixed(2));
       }
     }
-  }, [sendCurrency, receiveCurrency, sendAmount]);
+  }, [sendCurrency, receiveCurrency, sendAmount, cryptoPrices]);
 
   // Update receive amount when send amount changes
   const handleSendAmountChange = (value) => {
     setSendAmount(value);
     if (value && exchangeRate) {
-      const converted = (parseFloat(value) * parseFloat(exchangeRate)).toFixed(6);
+      const converted = (parseFloat(value) * parseFloat(exchangeRate)).toFixed(8);
       setReceiveAmount(converted);
       
-      const sendCrypto = cryptocurrencies.find(c => c.symbol === sendCurrency);
-      if (sendCrypto) {
-        setPriceUSD((parseFloat(value) * sendCrypto.price).toFixed(2));
+      if (cryptoPrices[sendCurrency]) {
+        setPriceUSD((parseFloat(value) * cryptoPrices[sendCurrency]).toFixed(2));
       }
     } else {
       setReceiveAmount('');
