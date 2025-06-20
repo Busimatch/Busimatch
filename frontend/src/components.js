@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowRight, 
+  ArrowUpDown,
   Star, 
   Users, 
   Zap, 
@@ -10,16 +11,17 @@ import {
   CheckCircle,
   ChevronDown,
   Search,
-  Building,
-  Handshake,
-  Globe,
-  TrendingUp,
+  Wallet,
   Shield,
   Heart,
   MessageCircle,
   Settings,
   Menu,
-  X
+  X,
+  Copy,
+  ExternalLink,
+  TrendingUp,
+  Globe
 } from 'lucide-react';
 
 // Header Component
@@ -33,7 +35,7 @@ export const Header = () => {
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-purple-500 rounded-lg flex items-center justify-center">
-              <Building className="w-5 h-5 text-white" />
+              <span className="text-white font-bold text-sm">B</span>
             </div>
             <span className="text-2xl font-bold text-white">BUSIMATCH</span>
           </div>
@@ -46,11 +48,9 @@ export const Header = () => {
             <a href="#" className="text-gray-300 hover:text-white transition-colors">API</a>
             <a href="#" className="text-gray-300 hover:text-white transition-colors">Support</a>
             <div className="flex items-center space-x-4">
-              <button className="text-gray-300 hover:text-white transition-colors">
-                Sign in
-              </button>
-              <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
-                Sign up
+              <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2">
+                <Wallet className="w-4 h-4" />
+                <span>Connect Wallet</span>
               </button>
             </div>
           </nav>
@@ -79,12 +79,10 @@ export const Header = () => {
                 <a href="#" className="text-gray-300 hover:text-white transition-colors">FAQ</a>
                 <a href="#" className="text-gray-300 hover:text-white transition-colors">API</a>
                 <a href="#" className="text-gray-300 hover:text-white transition-colors">Support</a>
-                <div className="flex flex-col space-y-2 pt-4 border-t border-gray-700">
-                  <button className="text-left text-gray-300 hover:text-white transition-colors">
-                    Sign in
-                  </button>
-                  <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors text-left">
-                    Sign up
+                <div className="pt-4 border-t border-gray-700">
+                  <button className="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center space-x-2">
+                    <Wallet className="w-4 h-4" />
+                    <span>Connect Wallet</span>
                   </button>
                 </div>
               </nav>
@@ -96,14 +94,34 @@ export const Header = () => {
   );
 };
 
-// Hero Section with Business Matching Interface
+// Hero Section with Crypto Exchange Interface
 export const HeroSection = () => {
-  const [lookingFor, setLookingFor] = useState('Investor');
-  const [offering, setOffering] = useState('Startup');
+  const [sendCurrency, setSendCurrency] = useState('BUSIMATCH');
+  const [receiveCurrency, setReceiveCurrency] = useState('USDT');
+  const [sendAmount, setSendAmount] = useState('');
+  const [receiveAmount, setReceiveAmount] = useState('');
 
-  const businessTypes = [
-    'Investor', 'Startup', 'Supplier', 'Customer', 'Partner', 'Mentor', 'Service Provider', 'Distributor'
+  const cryptocurrencies = [
+    { symbol: 'BUSIMATCH', name: 'Busimatch Token', icon: '🚀' },
+    { symbol: 'BTC', name: 'Bitcoin', icon: '₿' },
+    { symbol: 'ETH', name: 'Ethereum', icon: 'Ξ' },
+    { symbol: 'USDT', name: 'Tether', icon: '₮' },
+    { symbol: 'USDC', name: 'USD Coin', icon: 'Ⓤ' },
+    { symbol: 'BNB', name: 'Binance Coin', icon: '🔶' },
+    { symbol: 'SOL', name: 'Solana', icon: '◎' },
+    { symbol: 'ADA', name: 'Cardano', icon: '₳' },
+    { symbol: 'MATIC', name: 'Polygon', icon: '⬢' },
+    { symbol: 'AVAX', name: 'Avalanche', icon: '🔺' }
   ];
+
+  const swapCurrencies = () => {
+    const temp = sendCurrency;
+    setSendCurrency(receiveCurrency);
+    setReceiveCurrency(temp);
+    const tempAmount = sendAmount;
+    setSendAmount(receiveAmount);
+    setReceiveAmount(tempAmount);
+  };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -144,7 +162,7 @@ export const HeroSection = () => {
           transition={{ duration: 0.8 }}
           className="text-5xl md:text-7xl font-bold text-white mb-6"
         >
-          Lightning Business Matching
+          Lightning Cryptocurrency Exchange
         </motion.h1>
 
         <motion.p
@@ -153,87 +171,127 @@ export const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="text-xl text-gray-300 mb-12"
         >
-          Connect with the perfect business partners instantly
+          Instant Busimatch swaps with Lightning Network! Best rates and secure transactions.
         </motion.p>
 
-        {/* Business Matching Interface */}
+        {/* Crypto Exchange Interface */}
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
           className="bg-gray-800 bg-opacity-50 backdrop-blur-xl rounded-2xl p-8 border border-gray-700"
         >
-          <div className="grid md:grid-cols-2 gap-6 mb-6">
-            {/* Looking For */}
+          <div className="space-y-6">
+            {/* Send Section */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Looking For</label>
-              <div className="relative">
-                <select 
-                  value={lookingFor}
-                  onChange={(e) => setLookingFor(e.target.value)}
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  {businessTypes.map(type => (
-                    <option key={type} value={type}>{type}</option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-sm font-medium text-orange-400">Send</label>
+                <span className="text-sm text-gray-400">Balance: 0.00</span>
+              </div>
+              <div className="flex items-center space-x-4">
+                <input 
+                  type="number"
+                  value={sendAmount}
+                  onChange={(e) => setSendAmount(e.target.value)}
+                  placeholder="0.00"
+                  className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <div className="relative">
+                  <select 
+                    value={sendCurrency}
+                    onChange={(e) => setSendCurrency(e.target.value)}
+                    className="bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[140px]"
+                  >
+                    {cryptocurrencies.map(crypto => (
+                      <option key={crypto.symbol} value={crypto.symbol}>
+                        {crypto.icon} {crypto.symbol}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                </div>
               </div>
             </div>
 
-            {/* Offering */}
+            {/* Swap Button */}
+            <div className="flex justify-center">
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={swapCurrencies}
+                className="bg-gray-700 hover:bg-gray-600 text-white p-3 rounded-full transition-colors"
+              >
+                <ArrowUpDown className="w-5 h-5" />
+              </motion.button>
+            </div>
+
+            {/* Receive Section */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Offering</label>
-              <div className="relative">
-                <select 
-                  value={offering}
-                  onChange={(e) => setOffering(e.target.value)}
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  {businessTypes.map(type => (
-                    <option key={type} value={type}>{type}</option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-sm font-medium text-blue-400">Receive</label>
+                <span className="text-sm text-gray-400">≈ ${receiveAmount || '0.00'}</span>
+              </div>
+              <div className="flex items-center space-x-4">
+                <input 
+                  type="number"
+                  value={receiveAmount}
+                  onChange={(e) => setReceiveAmount(e.target.value)}
+                  placeholder="0.00"
+                  className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <div className="relative">
+                  <select 
+                    value={receiveCurrency}
+                    onChange={(e) => setReceiveCurrency(e.target.value)}
+                    className="bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[140px]"
+                  >
+                    {cryptocurrencies.map(crypto => (
+                      <option key={crypto.symbol} value={crypto.symbol}>
+                        {crypto.icon} {crypto.symbol}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                </div>
               </div>
             </div>
+
+            {/* Destination Wallet */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Destination Wallet Address</label>
+              <input 
+                type="text"
+                placeholder="Enter wallet address"
+                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            {/* Exchange Type */}
+            <div className="flex items-center justify-center space-x-4 mb-6">
+              <button className="px-4 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors">
+                Fixed rate (1.0%)
+              </button>
+              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                Float rate (0.5%)
+              </button>
+            </div>
+
+            {/* Exchange Button */}
+            <motion.button 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2"
+            >
+              <span>Exchange Now</span>
+              <ArrowRight className="w-5 h-5" />
+            </motion.button>
+
+            <p className="text-xs text-gray-400 mt-4 text-center">
+              By using this site and creating an exchange, you agree to the{' '}
+              <a href="#" className="text-blue-400 hover:text-blue-300">Terms of Service</a> and{' '}
+              <a href="#" className="text-blue-400 hover:text-blue-300">Privacy Policy</a>
+            </p>
           </div>
-
-          {/* Industry Input */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-300 mb-2">Industry/Sector</label>
-            <input 
-              type="text"
-              placeholder="e.g., Technology, Healthcare, Finance"
-              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          {/* Match Type */}
-          <div className="flex items-center justify-center space-x-4 mb-6">
-            <button className="px-4 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors">
-              Quick Match (0.5%)
-            </button>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-              Premium Match (1.0%)
-            </button>
-          </div>
-
-          {/* Match Button */}
-          <motion.button 
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2"
-          >
-            <span>Find Match Now</span>
-            <ArrowRight className="w-5 h-5" />
-          </motion.button>
-
-          <p className="text-xs text-gray-400 mt-4 text-center">
-            By using our service, you agree to the{' '}
-            <a href="#" className="text-blue-400 hover:text-blue-300">Terms of Service</a> and{' '}
-            <a href="#" className="text-blue-400 hover:text-blue-300">Privacy Policy</a>
-          </p>
         </motion.div>
       </div>
     </section>
@@ -246,19 +304,19 @@ export const FeaturesSection = () => {
     {
       icon: Clock,
       title: "Save time",
-      description: "Maximum matching speed due to AI-powered automation",
+      description: "Maximum exchange speed due to full automation",
       color: "from-green-400 to-blue-500"
     },
     {
-      icon: Handshake,
-      title: "Make connections",
-      description: "Find the right partners and build valuable business relationships",
+      icon: ArrowUpDown,
+      title: "Make an exchange",
+      description: "Pick the right strategy and make favourable trades",
       color: "from-blue-400 to-purple-500"
     },
     {
       icon: DollarSign,
       title: "Save money",
-      description: "Best matching rates and minimum commission fees",
+      description: "Best exchange rates and minimum commissions",
       color: "from-purple-400 to-pink-500"
     }
   ];
@@ -273,7 +331,7 @@ export const FeaturesSection = () => {
           transition={{ duration: 0.8 }}
           className="text-4xl md:text-5xl font-bold text-white text-center mb-16"
         >
-          Trusted since 2020
+          Trusted since 2018
         </motion.h2>
 
         <div className="grid md:grid-cols-3 gap-8">
@@ -298,17 +356,19 @@ export const FeaturesSection = () => {
   );
 };
 
-// Recent Matches Section
-export const RecentMatches = () => {
-  const matches = [
-    { from: "Tech Startup", to: "VC Fund", time: "5 sec", amount: "$2M Series A" },
-    { from: "Restaurant Chain", to: "Food Supplier", time: "1 min", amount: "Supply Contract" },
-    { from: "SaaS Company", to: "Marketing Agency", time: "2 min", amount: "Growth Partnership" },
-    { from: "Manufacturer", to: "Distributor", time: "3 min", amount: "Distribution Deal" },
-    { from: "E-commerce", to: "Logistics", time: "5 min", amount: "Fulfillment Partner" },
-    { from: "Fintech", to: "Bank", time: "8 min", amount: "Banking Partnership" },
-    { from: "Healthcare", to: "Insurance", time: "12 min", amount: "Coverage Deal" },
-    { from: "EdTech", to: "School District", time: "15 min", amount: "Education Contract" }
+// Recent Transactions Section
+export const RecentTransactions = () => {
+  const transactions = [
+    { from: "0.01296 ETH", to: "USDC", time: "5 sec", address: "0x742d...35Cc" },
+    { from: "604 USDT", to: "LTC", time: "1 min", address: "0x8f9a...78Dd" },
+    { from: "0.017 SOL", to: "USDC", time: "2 min", address: "0x1b2c...91Ee" },
+    { from: "101 USDT", to: "BUSIMATCH", time: "3 min", address: "0x3d4e...12Ff" },
+    { from: "1000 BUSIMATCH", to: "SOL", time: "5 min", address: "0x5f6g...34Gg" },
+    { from: "4020 USDT", to: "BTC", time: "8 min", address: "0x7h8i...56Hh" },
+    { from: "2919 USDT", to: "BTC", time: "12 min", address: "0x9j0k...78Ii" },
+    { from: "143 TRX", to: "BTC", time: "15 min", address: "0xbl2m...90Jj" },
+    { from: "40.555 TRX", to: "BTC", time: "18 min", address: "0xdn4o...12Kk" },
+    { from: "548 USDT", to: "BTC", time: "20 min", address: "0xpq6r...34Ll" }
   ];
 
   return (
@@ -324,11 +384,11 @@ export const RecentMatches = () => {
           transition={{ duration: 0.8 }}
           className="text-4xl md:text-5xl font-bold text-white text-center mb-16"
         >
-          Recent matches
+          Recent transactions
         </motion.h2>
 
         <div className="bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-2xl border border-gray-700 overflow-hidden">
-          {matches.map((match, index) => (
+          {transactions.map((tx, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, x: -50 }}
@@ -337,15 +397,15 @@ export const RecentMatches = () => {
               className="flex items-center justify-between p-4 border-b border-gray-700 last:border-b-0 hover:bg-gray-700 hover:bg-opacity-30 transition-colors duration-300"
             >
               <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-400">{match.time} ago</span>
+                <span className="text-sm text-gray-400">{tx.time} ago</span>
                 <div className="flex items-center space-x-3">
-                  <span className="text-white font-medium">{match.from}</span>
+                  <span className="text-white font-medium">{tx.from}</span>
                   <ArrowRight className="w-4 h-4 text-gray-400" />
-                  <span className="text-white font-medium">{match.to}</span>
+                  <span className="text-white font-medium">{tx.to}</span>
                 </div>
               </div>
               <div className="text-right">
-                <span className="text-blue-400 font-medium">{match.amount}</span>
+                <span className="text-blue-400 font-medium text-sm">{tx.address}</span>
               </div>
             </motion.div>
           ))}
@@ -361,24 +421,24 @@ export const FAQSection = () => {
   
   const faqs = [
     {
-      question: "How can I track my match requests?",
-      answer: "You can track your match requests in three ways: through email notifications, on our website dashboard, or by viewing the match history in your profile."
+      question: "How can I track my order?",
+      answer: "In three ways: by email, on our website, or by viewing the transactions in the blockchain explorer."
     },
     {
-      question: "Why should I trust Busimatch?",
-      answer: "We don't require extensive personal details upfront. We use verified business profiles and secure matching algorithms. All connections are made through our platform with built-in security measures."
+      question: "Why can I trust you?",
+      answer: "No registration and no need to share your personal details. We don't hold your funds, all exchanges take place instantly in fully automatic mode."
     },
     {
-      question: "Are there any hidden fees?",
-      answer: "No hidden fees. We charge 1% for premium matches with dedicated support, 0.5% for quick matches. All fees are transparent and shown upfront."
+      question: "Do you have hidden fees?",
+      answer: "1% if you opt for a fixed rate, 0.5% if you opt for a floating rate. All fees are transparent and shown upfront."
     },
     {
-      question: "How does the matching algorithm work?",
-      answer: "Our AI-powered algorithm analyzes business profiles, industry compatibility, geographic preferences, deal size, and partnership history to find the most relevant matches."
+      question: "What is Busimatch token?",
+      answer: "Busimatch is a decentralized cryptocurrency token designed for fast and secure peer-to-peer transactions with low fees and high scalability."
     },
     {
-      question: "What types of businesses can I find matches for?",
-      answer: "We support all types of business partnerships: investors, suppliers, customers, distributors, service providers, mentors, and strategic partners across various industries."
+      question: "Which wallets are supported?",
+      answer: "We support MetaMask, WalletConnect, Coinbase Wallet, Trust Wallet, and most other popular cryptocurrency wallets."
     }
   ];
 
@@ -443,14 +503,14 @@ export const FAQSection = () => {
 export const NewsSection = () => {
   const news = [
     {
-      title: "AI-Powered Matching Reaches 99% Success Rate",
-      excerpt: "Our new machine learning algorithm has achieved unprecedented accuracy in business matching...",
+      title: "Busimatch Token Launches on Lightning Network",
+      excerpt: "Enhanced transaction speeds and reduced fees with Lightning Network integration for Busimatch token...",
       image: "https://images.pexels.com/photos/7616608/pexels-photo-7616608.jpeg",
       date: "June 15, 2025"
     },
     {
-      title: "Global Expansion: Busimatch Now in 50+ Countries",
-      excerpt: "We're excited to announce our expansion into new markets across Asia and Europe...",
+      title: "New DEX Features: Advanced Trading Tools",
+      excerpt: "We're introducing limit orders, stop-loss features, and advanced charting tools for better trading experience...",
       image: "https://images.unsplash.com/photo-1566816931809-10aade99aa3a",
       date: "June 10, 2025"
     }
@@ -521,31 +581,31 @@ export const NewsSection = () => {
 export const GuidesSection = () => {
   const guides = [
     {
-      title: "Types of Business Partnerships",
-      excerpt: "Learn about different types of business partnerships and how to choose the right one for your company.",
+      title: "Types of cryptocurrency wallets",
+      excerpt: "Learn about different types of crypto wallets and how to choose the right one for storing your coins.",
       image: "https://images.unsplash.com/photo-1664527184222-420bb0fec61a",
-      category: "Partnerships",
+      category: "Wallets",
       date: "June 12, 2025"
     },
     {
-      title: "How to Create a Winning Business Profile",
-      excerpt: "Step-by-step guide to creating an attractive business profile that gets noticed by potential partners.",
+      title: "How to exchange cryptocurrencies on Busimatch",
+      excerpt: "Step-by-step guide to making your first cryptocurrency exchange on our platform safely and efficiently.",
       image: "https://images.unsplash.com/photo-1567910977265-62375d7dba86",
-      category: "Profile Tips",
+      category: "Tutorial",
       date: "June 8, 2025"
     },
     {
-      title: "Negotiating Partnership Deals",
-      excerpt: "Best practices for negotiating successful partnership agreements that benefit all parties involved.",
+      title: "Understanding DeFi and DEX trading",
+      excerpt: "Complete guide to decentralized finance and how decentralized exchanges work in the crypto ecosystem.",
       image: "https://images.pexels.com/photos/7663144/pexels-photo-7663144.jpeg",
-      category: "Negotiation",
+      category: "DeFi",
       date: "June 5, 2025"
     },
     {
-      title: "Building Long-term Business Relationships",
-      excerpt: "Strategies for maintaining and growing successful business partnerships over time.",
+      title: "Crypto security best practices",
+      excerpt: "Essential security tips to protect your cryptocurrency assets and avoid common scams and threats.",
       image: "https://images.unsplash.com/photo-1572191783453-62f99a6055ce",
-      category: "Relationships",
+      category: "Security",
       date: "June 1, 2025"
     }
   ];
@@ -632,12 +692,12 @@ export const Footer = () => {
       title: "Popular",
       links: [
         { text: "Blog", href: "#" },
-        { text: "Investor to Startup", href: "#" },
-        { text: "Startup to Investor", href: "#" },
-        { text: "Supplier to Business", href: "#" },
-        { text: "Business to Supplier", href: "#" },
-        { text: "Customer to Service", href: "#" },
-        { text: "Service to Customer", href: "#" }
+        { text: "BTC to BUSIMATCH", href: "#" },
+        { text: "BUSIMATCH to BTC", href: "#" },
+        { text: "ETH to BUSIMATCH", href: "#" },
+        { text: "USDT(TRC20) to BUSIMATCH", href: "#" },
+        { text: "USDT(ETH) to BUSIMATCH", href: "#" },
+        { text: "USDT(TRX) to BUSIMATCH", href: "#" }
       ]
     },
     {
@@ -687,7 +747,7 @@ export const Footer = () => {
         
         <div className="border-t border-gray-800 mt-12 pt-8 text-center">
           <p className="text-gray-400 text-sm">
-            © 2020-2025 Busimatch. All rights reserved.
+            © 2018-2025 Busimatch DEX. All rights reserved.
           </p>
         </div>
       </div>
