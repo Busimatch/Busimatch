@@ -141,7 +141,7 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
 
   const cryptocurrencies = [
     { symbol: 'BTC', name: 'Bitcoin', icon: '₿', color: 'text-orange-400', geckoId: 'bitcoin' },
-    { symbol: 'BUSIMATCH', name: 'Busimatch Token', icon: '🚀', color: 'text-purple-400', geckoId: null, price: 0.85 },
+    { symbol: 'BUSIMATCH', name: 'Busimatch Token', icon: '🚀', color: 'text-purple-400', geckoId: null, price: 1.00 },
     { symbol: 'ETH', name: 'Ethereum', icon: 'Ξ', color: 'text-blue-400', geckoId: 'ethereum' },
     { symbol: 'BNB', name: 'BNB Smart Chain (BEP20)', icon: '🔶', color: 'text-yellow-400', geckoId: 'binancecoin' },
     { symbol: 'USDT', name: 'Tether (ERC20)', icon: '₮', color: 'text-green-400', geckoId: 'tether' },
