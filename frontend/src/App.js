@@ -17,7 +17,7 @@ function App() {
       <Header />
       <HeroSection />
       <FeaturesSection />
-      <RecentMatches />
+      <RecentTransactions />
       <FAQSection />
       <NewsSection />
       <GuidesSection />
