@@ -525,12 +525,12 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
                   label="Receive"
                 />
               </div>
-              {receiveAmount && (
+              {receiveAmount && cryptoPrices[receiveCurrency] && (
                 <div className="mt-2 text-sm text-gray-400">
                   {(() => {
-                    const receiveCrypto = cryptocurrencies.find(c => c.symbol === receiveCurrency);
-                    if (receiveCrypto && receiveAmount) {
-                      const usdValue = (parseFloat(receiveAmount) * receiveCrypto.price).toFixed(2);
+                    const receivePrice = cryptoPrices[receiveCurrency];
+                    if (receivePrice && receiveAmount) {
+                      const usdValue = (parseFloat(receiveAmount) * receivePrice).toFixed(2);
                       return `≈ $${usdValue}`;
                     }
                     return '';
