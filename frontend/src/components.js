@@ -1229,7 +1229,7 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
           transition={{ duration: 0.8 }}
           className="text-5xl md:text-7xl font-bold text-white mb-6"
         >
-          Lightning cryptocurrency exchange
+          {t('heroTitle')}
         </motion.h1>
 
         <motion.p
@@ -1238,7 +1238,7 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="text-xl text-gray-300 mb-12"
         >
-          Instant Busimatch swaps with Lightning Network! Best rates and large volumes of currencies.
+          {t('heroSubtitle')}
         </motion.p>
 
         {/* Crypto Exchange Interface */}
