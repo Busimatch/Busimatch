@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import { 
   Header, 
-  HeroSection, 
+  ExchangeApp, 
   FeaturesSection, 
   RecentTransactions, 
   FAQSection, 
@@ -15,7 +15,7 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <HeroSection />
+      <ExchangeApp />
       <FeaturesSection />
       <RecentTransactions />
       <FAQSection />

@@ -21,7 +21,12 @@ import {
   Copy,
   ExternalLink,
   TrendingUp,
-  Globe
+  Globe,
+  QrCode,
+  Download,
+  RefreshCw,
+  AlertCircle,
+  Hourglass
 } from 'lucide-react';
 
 // Header Component
@@ -34,7 +39,7 @@ export const Header = () => {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-purple-500 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-r from-orange-400 to-orange-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">B</span>
             </div>
             <span className="text-2xl font-bold text-white">BUSIMATCH</span>
@@ -48,9 +53,17 @@ export const Header = () => {
             <a href="#" className="text-gray-300 hover:text-white transition-colors">API</a>
             <a href="#" className="text-gray-300 hover:text-white transition-colors">Support</a>
             <div className="flex items-center space-x-4">
-              <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2">
-                <Wallet className="w-4 h-4" />
-                <span>Connect Wallet</span>
+              <button className="text-gray-300 hover:text-white transition-colors">
+                🇬🇧
+              </button>
+              <button className="text-gray-300 hover:text-white transition-colors">
+                🌙
+              </button>
+              <button className="text-gray-300 hover:text-white transition-colors">
+                Sign in
+              </button>
+              <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
+                Sign up
               </button>
             </div>
           </nav>
@@ -79,10 +92,12 @@ export const Header = () => {
                 <a href="#" className="text-gray-300 hover:text-white transition-colors">FAQ</a>
                 <a href="#" className="text-gray-300 hover:text-white transition-colors">API</a>
                 <a href="#" className="text-gray-300 hover:text-white transition-colors">Support</a>
-                <div className="pt-4 border-t border-gray-700">
-                  <button className="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center space-x-2">
-                    <Wallet className="w-4 h-4" />
-                    <span>Connect Wallet</span>
+                <div className="flex flex-col space-y-2 pt-4 border-t border-gray-700">
+                  <button className="text-left text-gray-300 hover:text-white transition-colors">
+                    Sign in
+                  </button>
+                  <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors text-left">
+                    Sign up
                   </button>
                 </div>
               </nav>
@@ -94,24 +109,46 @@ export const Header = () => {
   );
 };
 
+// Main Exchange Component
+export const ExchangeApp = () => {
+  const [currentPage, setCurrentPage] = useState('exchange'); // 'exchange' or 'order'
+  const [orderData, setOrderData] = useState(null);
+  
+  return (
+    <div className="min-h-screen">
+      {currentPage === 'exchange' ? (
+        <HeroSection setCurrentPage={setCurrentPage} setOrderData={setOrderData} />
+      ) : (
+        <OrderTrackingPage orderData={orderData} setCurrentPage={setCurrentPage} />
+      )}
+    </div>
+  );
+};
+
 // Hero Section with Crypto Exchange Interface
-export const HeroSection = () => {
-  const [sendCurrency, setSendCurrency] = useState('BUSIMATCH');
-  const [receiveCurrency, setReceiveCurrency] = useState('USDT');
+export const HeroSection = ({ setCurrentPage, setOrderData }) => {
+  const [sendCurrency, setSendCurrency] = useState('BTC');
+  const [receiveCurrency, setReceiveCurrency] = useState('BUSIMATCH');
   const [sendAmount, setSendAmount] = useState('');
   const [receiveAmount, setReceiveAmount] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showSendDropdown, setShowSendDropdown] = useState(false);
+  const [showReceiveDropdown, setShowReceiveDropdown] = useState(false);
 
   const cryptocurrencies = [
-    { symbol: 'BUSIMATCH', name: 'Busimatch Token', icon: '🚀' },
-    { symbol: 'BTC', name: 'Bitcoin', icon: '₿' },
-    { symbol: 'ETH', name: 'Ethereum', icon: 'Ξ' },
-    { symbol: 'USDT', name: 'Tether', icon: '₮' },
-    { symbol: 'USDC', name: 'USD Coin', icon: 'Ⓤ' },
-    { symbol: 'BNB', name: 'Binance Coin', icon: '🔶' },
-    { symbol: 'SOL', name: 'Solana', icon: '◎' },
-    { symbol: 'ADA', name: 'Cardano', icon: '₳' },
-    { symbol: 'MATIC', name: 'Polygon', icon: '⬢' },
-    { symbol: 'AVAX', name: 'Avalanche', icon: '🔺' }
+    { symbol: 'BTC', name: 'Bitcoin', icon: '₿', color: 'text-orange-400' },
+    { symbol: 'BUSIMATCH', name: 'Busimatch Token', icon: '🚀', color: 'text-purple-400' },
+    { symbol: 'ETH', name: 'Ethereum', icon: 'Ξ', color: 'text-blue-400' },
+    { symbol: 'BNB', name: 'BNB Smart Chain (BEP20)', icon: '🔶', color: 'text-yellow-400' },
+    { symbol: 'USDT', name: 'Tether (ERC20)', icon: '₮', color: 'text-green-400' },
+    { symbol: 'USDT_TRC20', name: 'Tether (TRC20)', icon: '₮', color: 'text-green-400' },
+    { symbol: 'SOL', name: 'Solana', icon: '◎', color: 'text-purple-400' },
+    { symbol: 'ADA', name: 'Cardano', icon: '₳', color: 'text-blue-400' },
+    { symbol: 'XRP', name: 'Ripple', icon: '◈', color: 'text-blue-300' },
+    { symbol: 'MATIC', name: 'Polygon', icon: '⬢', color: 'text-purple-400' },
+    { symbol: 'AVAX', name: 'Avalanche', icon: '🔺', color: 'text-red-400' },
+    { symbol: 'LTC', name: 'Litecoin', icon: 'Ł', color: 'text-gray-400' },
+    { symbol: 'MONERO', name: 'Monero', icon: 'ɱ', color: 'text-orange-400' }
   ];
 
   const swapCurrencies = () => {
@@ -122,6 +159,117 @@ export const HeroSection = () => {
     setSendAmount(receiveAmount);
     setReceiveAmount(tempAmount);
   };
+
+  const handleExchange = () => {
+    const order = {
+      id: 'FB9A34',
+      sendAmount,
+      sendCurrency,
+      receiveAmount: receiveAmount || (parseFloat(sendAmount) * 1.95).toFixed(6),
+      receiveCurrency,
+      status: 'awaiting_deposit',
+      createdAt: new Date().toLocaleString(),
+      receivingAddress: generateAddress(sendCurrency),
+      destinationAddress: 'rJQrESwxf2BfkGIfSXwDi7Kb9rU48ei',
+      exchangeRate: '1.95',
+      networkConfirmations: 1
+    };
+    setOrderData(order);
+    setCurrentPage('order');
+  };
+
+  const generateAddress = (currency) => {
+    const addresses = {
+      'BTC': 'bc1qa46gek8s76v3652vx70xk6nlx7us7meln30vgl',
+      'ETH': '0x742d35Cc6C3D1d5D9bF5c8f8A5e2F3a1B2c4d5e6',
+      'SOL': '8s9KQrXzBfkGhfSXwDj8Kb0rU49fi2nL4pO1q3R7sTuV',
+      'BNB': 'bnb1qa46gek8s76v3652vx70xk6nlx7us7meln30vgl',
+      'USDT': '0x852c47Dd7C3D1d6D9bF6c9f9A6e3F4a2B3c5d6e7',
+      'XRP': 'rJQrESwxfZBfkGhfSXwDj7Kb9rU48ei',
+      'ADA': 'addr1qa46gek8s76v3652vx70xk6nlx7us7meln30vgl9k2m',
+      'MATIC': '0x963d58Ee8C4D2d7D0bF7c0f0A7e4F5a3B4c6d7e8',
+      'AVAX': 'X-avax1qa46gek8s76v3652vx70xk6nlx7us7meln30vgl'
+    };
+    return addresses[currency] || 'generated_address_' + Math.random().toString(36).substr(2, 9);
+  };
+
+  const filteredCurrencies = cryptocurrencies.filter(crypto =>
+    crypto.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    crypto.symbol.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const CurrencyDropdown = ({ isOpen, setIsOpen, selected, onSelect, label }) => (
+    <div className="relative">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white flex items-center justify-between hover:bg-gray-600 transition-colors"
+      >
+        <div className="flex items-center space-x-2">
+          <span className="text-lg">{cryptocurrencies.find(c => c.symbol === selected)?.icon}</span>
+          <span className="font-medium">{selected}</span>
+        </div>
+        <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="absolute top-full left-0 right-0 z-50 bg-gray-800 border border-gray-600 rounded-lg mt-1 max-h-80 overflow-y-auto"
+          >
+            <div className="p-3 border-b border-gray-600">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Type a currency or ticker"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg pl-10 pr-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+            
+            <div className="py-2">
+              <div className="px-3 py-2 text-xs text-gray-400 font-medium">Popular currencies</div>
+              {filteredCurrencies.map((crypto) => (
+                <button
+                  key={crypto.symbol}
+                  onClick={() => {
+                    onSelect(crypto.symbol);
+                    setIsOpen(false);
+                    setSearchTerm('');
+                  }}
+                  className="w-full px-3 py-2 text-left hover:bg-gray-700 transition-colors flex items-center justify-between"
+                >
+                  <div className="flex items-center space-x-3">
+                    <span className="text-lg">{crypto.icon}</span>
+                    <div>
+                      <div className="text-white font-medium">{crypto.name}</div>
+                      <div className="text-gray-400 text-sm">{crypto.symbol}</div>
+                    </div>
+                  </div>
+                  <span className={`text-sm font-mono ${crypto.color}`}>{crypto.symbol}</span>
+                </button>
+              ))}
+              
+              {filteredCurrencies.length === 0 && (
+                <div className="px-3 py-4 text-gray-400 text-center">No currencies found</div>
+              )}
+              
+              <div className="border-t border-gray-600 mt-2 pt-2">
+                <button className="w-full px-3 py-2 text-left text-blue-400 hover:bg-gray-700 transition-colors">
+                  All currencies
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -162,7 +310,7 @@ export const HeroSection = () => {
           transition={{ duration: 0.8 }}
           className="text-5xl md:text-7xl font-bold text-white mb-6"
         >
-          Lightning Cryptocurrency Exchange
+          Lightning cryptocurrency exchange
         </motion.h1>
 
         <motion.p
@@ -171,7 +319,7 @@ export const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="text-xl text-gray-300 mb-12"
         >
-          Instant Busimatch swaps with Lightning Network! Best rates and secure transactions.
+          Instant Busimatch swaps with Lightning Network! Best rates and large volumes of currencies.
         </motion.p>
 
         {/* Crypto Exchange Interface */}
@@ -181,40 +329,38 @@ export const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="bg-gray-800 bg-opacity-50 backdrop-blur-xl rounded-2xl p-8 border border-gray-700"
         >
-          <div className="space-y-6">
+          <div className="grid md:grid-cols-3 gap-6 mb-6">
             {/* Send Section */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-sm font-medium text-orange-400">Send</label>
-                <span className="text-sm text-gray-400">Balance: 0.00</span>
+                <span className="text-sm text-orange-400">{sendCurrency}</span>
               </div>
-              <div className="flex items-center space-x-4">
+              <div className="space-y-3">
                 <input 
                   type="number"
                   value={sendAmount}
                   onChange={(e) => setSendAmount(e.target.value)}
-                  placeholder="0.00"
-                  className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="0.0206473"
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
-                <div className="relative">
-                  <select 
-                    value={sendCurrency}
-                    onChange={(e) => setSendCurrency(e.target.value)}
-                    className="bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[140px]"
-                  >
-                    {cryptocurrencies.map(crypto => (
-                      <option key={crypto.symbol} value={crypto.symbol}>
-                        {crypto.icon} {crypto.symbol}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-                </div>
+                <CurrencyDropdown
+                  isOpen={showSendDropdown}
+                  setIsOpen={setShowSendDropdown}
+                  selected={sendCurrency}
+                  onSelect={setSendCurrency}
+                  label="Send"
+                />
               </div>
+              {sendAmount && (
+                <div className="mt-2 text-sm text-gray-400">
+                  1 {sendCurrency} = 48461.401 XRP
+                </div>
+              )}
             </div>
 
             {/* Swap Button */}
-            <div className="flex justify-center">
+            <div className="flex items-center justify-center">
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
@@ -229,70 +375,228 @@ export const HeroSection = () => {
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-sm font-medium text-blue-400">Receive</label>
-                <span className="text-sm text-gray-400">≈ ${receiveAmount || '0.00'}</span>
+                <span className="text-sm text-blue-400">Ripple</span>
               </div>
-              <div className="flex items-center space-x-4">
+              <div className="space-y-3">
                 <input 
                   type="number"
                   value={receiveAmount}
                   onChange={(e) => setReceiveAmount(e.target.value)}
-                  placeholder="0.00"
-                  className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="999.7071"
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                <div className="relative">
-                  <select 
-                    value={receiveCurrency}
-                    onChange={(e) => setReceiveCurrency(e.target.value)}
-                    className="bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[140px]"
-                  >
-                    {cryptocurrencies.map(crypto => (
-                      <option key={crypto.symbol} value={crypto.symbol}>
-                        {crypto.icon} {crypto.symbol}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                <CurrencyDropdown
+                  isOpen={showReceiveDropdown}
+                  setIsOpen={setShowReceiveDropdown}
+                  selected={receiveCurrency}
+                  onSelect={setReceiveCurrency}
+                  label="Receive"
+                />
+              </div>
+              {receiveAmount && (
+                <div className="mt-2 text-sm text-gray-400">
+                  ≈ $2135.81
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Destination Wallet */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-300 mb-2">Destination</label>
+            <input 
+              type="text"
+              placeholder="Your Ripple address"
+              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          {/* Exchange Type */}
+          <div className="flex items-center justify-center space-x-4 mb-6">
+            <button className="px-6 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors">
+              Fixed rate (1.0%)
+            </button>
+            <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              Float rate (0.5%)
+            </button>
+          </div>
+
+          {/* Exchange Button */}
+          <motion.button 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleExchange}
+            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2"
+          >
+            <span>Exchange now</span>
+            <ArrowRight className="w-5 h-5" />
+          </motion.button>
+
+          <p className="text-xs text-gray-400 mt-4 text-center">
+            By using the site and creating an exchange, you agree to the{' '}
+            <a href="#" className="text-blue-400 hover:text-blue-300">Terms of Service</a> and{' '}
+            <a href="#" className="text-blue-400 hover:text-blue-300">Privacy Policy</a>
+          </p>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+// Order Tracking Page Component
+export const OrderTrackingPage = ({ orderData, setCurrentPage }) => {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [timeRemaining, setTimeRemaining] = useState('29:58');
+
+  const steps = [
+    { icon: RefreshCw, title: 'Awaiting deposit', active: true },
+    { icon: Hourglass, title: 'Awaiting confirmations', active: false },
+    { icon: ArrowUpDown, title: 'Perform exchange', active: false },
+    { icon: CheckCircle, title: 'Done', active: false }
+  ];
+
+  const generateQRCode = (address) => {
+    // In a real app, you'd generate actual QR code
+    return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='white'/%3E%3Cg fill='black'%3E%3Crect x='20' y='20' width='20' height='20'/%3E%3Crect x='60' y='20' width='20' height='20'/%3E%3Crect x='100' y='20' width='20' height='20'/%3E%3Crect x='140' y='20' width='20' height='20'/%3E%3Crect x='20' y='60' width='20' height='20'/%3E%3Crect x='180' y='60' width='20' height='20'/%3E%3Crect x='20' y='100' width='20' height='20'/%3E%3Crect x='60' y='100' width='20' height='20'/%3E%3Crect x='140' y='100' width='20' height='20'/%3E%3Crect x='180' y='100' width='20' height='20'/%3E%3Crect x='20' y='140' width='20' height='20'/%3E%3Crect x='100' y='140' width='20' height='20'/%3E%3Crect x='20' y='180' width='20' height='20'/%3E%3Crect x='60' y='180' width='20' height='20'/%3E%3Crect x='100' y='180' width='20' height='20'/%3E%3Crect x='140' y='180' width='20' height='20'/%3E%3C/g%3E%3C/svg%3E";
+  };
+
+  return (
+    <section className="relative min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900">
+      {/* Background */}
+      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1597315797662-cb81ba54c8b2')] bg-cover bg-center opacity-20"></div>
+      
+      <div className="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl w-full">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <button 
+              onClick={() => setCurrentPage('exchange')}
+              className="text-blue-400 hover:text-blue-300 mb-4 flex items-center space-x-2 mx-auto"
+            >
+              <ArrowRight className="w-4 h-4 rotate-180" />
+              <span>Back to exchange</span>
+            </button>
+            
+            <div className="bg-gray-800 bg-opacity-50 backdrop-blur-xl rounded-2xl p-6 border border-gray-700 mb-6">
+              <div className="flex items-center justify-center space-x-4 mb-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-orange-400">{orderData.sendAmount} {orderData.sendCurrency}</div>
+                  <div className="text-sm text-gray-400">YOU SEND</div>
+                </div>
+                <ArrowRight className="text-gray-400 w-6 h-6" />
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-blue-400">{orderData.receiveAmount} {orderData.receiveCurrency}</div>
+                  <div className="text-sm text-gray-400">YOU RECEIVE</div>
+                </div>
+              </div>
+              <div className="text-center text-gray-400 text-sm">
+                bc1qa46gek8s76v3652vx70xk6nlx7us7meln30vgl → rJQrESwxfZBfkGhfSXwPi7Kb9rU48ei
+              </div>
+            </div>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Left Column - Order Details */}
+            <div className="space-y-6">
+              {/* Order Info */}
+              <div className="bg-gray-800 bg-opacity-50 backdrop-blur-xl rounded-2xl p-6 border border-gray-700">
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div>
+                    <div className="text-sm text-gray-400 mb-1">Order ID</div>
+                    <div className="text-blue-400 font-mono flex items-center space-x-2">
+                      <span>{orderData.id}</span>
+                      <Copy className="w-4 h-4 cursor-pointer hover:text-blue-300" />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-400 mb-1">Time remaining</div>
+                    <div className="text-red-400 font-mono">{timeRemaining}</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-400 mb-1">Order type</div>
+                    <div className="text-white">Float rate</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-400 mb-1">Creation time</div>
+                    <div className="text-white text-sm">{orderData.createdAt}</div>
+                  </div>
+                </div>
+
+                {/* Send Instructions */}
+                <div className="mb-6">
+                  <div className="text-white font-semibold mb-3">
+                    Send <span className="text-orange-400">{orderData.sendAmount} {orderData.sendCurrency}</span> to the address:
+                  </div>
+                  <div className="bg-gray-700 rounded-lg p-4">
+                    <div className="flex items-center justify-between">
+                      <code className="text-blue-400 text-sm break-all">{orderData.receivingAddress}</code>
+                      <Copy className="w-4 h-4 text-gray-400 cursor-pointer hover:text-white ml-2" />
+                    </div>
+                  </div>
+                  <div className="text-sm text-gray-400 mt-2">
+                    The exchange rate will be fixed after receiving <span className="text-white">{orderData.networkConfirmations} network confirmations</span>.
+                  </div>
+                </div>
+
+                {/* Receiving Address */}
+                <div>
+                  <div className="text-sm text-gray-400 mb-2">Receiving address XRP</div>
+                  <div className="bg-gray-700 rounded-lg p-4">
+                    <div className="flex items-center justify-between">
+                      <code className="text-blue-400 text-sm">{orderData.destinationAddress}</code>
+                      <Copy className="w-4 h-4 text-gray-400 cursor-pointer hover:text-white ml-2" />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Destination Wallet */}
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Destination Wallet Address</label>
-              <input 
-                type="text"
-                placeholder="Enter wallet address"
-                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+            {/* Right Column - QR Code and Status */}
+            <div className="space-y-6">
+              {/* QR Code */}
+              <div className="bg-gray-800 bg-opacity-50 backdrop-blur-xl rounded-2xl p-6 border border-gray-700 text-center">
+                <div className="mb-4">
+                  <img 
+                    src={generateQRCode(orderData.receivingAddress)}
+                    alt="QR Code"
+                    className="w-48 h-48 mx-auto bg-white rounded-lg p-4"
+                  />
+                </div>
+                <div className="flex space-x-3">
+                  <button className="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg transition-colors">
+                    Address
+                  </button>
+                  <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors">
+                    With amount
+                  </button>
+                </div>
+              </div>
+
+              {/* Progress Steps */}
+              <div className="bg-gray-800 bg-opacity-50 backdrop-blur-xl rounded-2xl p-6 border border-gray-700">
+                <div className="space-y-4">
+                  {steps.map((step, index) => (
+                    <div key={index} className="flex items-center space-x-4">
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                        index === 0 ? 'bg-blue-600' : 'bg-gray-600'
+                      }`}>
+                        <step.icon className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <div className={`font-medium ${index === 0 ? 'text-white' : 'text-gray-400'}`}>
+                          {step.title}
+                        </div>
+                      </div>
+                      {index < steps.length - 1 && (
+                        <ArrowRight className="w-4 h-4 text-gray-400" />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-
-            {/* Exchange Type */}
-            <div className="flex items-center justify-center space-x-4 mb-6">
-              <button className="px-4 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors">
-                Fixed rate (1.0%)
-              </button>
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                Float rate (0.5%)
-              </button>
-            </div>
-
-            {/* Exchange Button */}
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2"
-            >
-              <span>Exchange Now</span>
-              <ArrowRight className="w-5 h-5" />
-            </motion.button>
-
-            <p className="text-xs text-gray-400 mt-4 text-center">
-              By using this site and creating an exchange, you agree to the{' '}
-              <a href="#" className="text-blue-400 hover:text-blue-300">Terms of Service</a> and{' '}
-              <a href="#" className="text-blue-400 hover:text-blue-300">Privacy Policy</a>
-            </p>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
@@ -438,7 +742,7 @@ export const FAQSection = () => {
     },
     {
       question: "Which wallets are supported?",
-      answer: "We support MetaMask, WalletConnect, Coinbase Wallet, Trust Wallet, and most other popular cryptocurrency wallets."
+      answer: "We support MetaMask, WalletConnect, Coinbase Wallet, Trust Wallet, and most other popular cryptocurrency wallets for sending and receiving cryptocurrencies."
     }
   ];
 
