@@ -1227,7 +1227,7 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-5xl md:text-7xl font-bold text-white mb-6"
+          className="text-3xl md:text-5xl font-bold text-white mb-6 relative z-20"
         >
           {t('heroTitle')}
         </motion.h1>
@@ -1236,7 +1236,7 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-xl text-gray-300 mb-12"
+          className="text-lg md:text-xl text-gray-200 mb-12 relative z-20"
         >
           {t('heroSubtitle')}
         </motion.p>
