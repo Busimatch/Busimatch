@@ -1977,12 +1977,13 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
 export const OrderTrackingPage = ({ orderData, setCurrentPage }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState('29:58');
+  const { t } = useLanguage();
 
   const steps = [
-    { icon: RefreshCw, title: 'Awaiting deposit', active: true },
-    { icon: Hourglass, title: 'Awaiting confirmations', active: false },
-    { icon: ArrowUpDown, title: 'Perform exchange', active: false },
-    { icon: CheckCircle, title: 'Done', active: false }
+    { icon: RefreshCw, title: t('awaitingDeposit'), active: true },
+    { icon: Hourglass, title: t('awaitingConfirmations'), active: false },
+    { icon: ArrowUpDown, title: t('performExchange'), active: false },
+    { icon: CheckCircle, title: t('done'), active: false }
   ];
 
   const generateQRCode = (address) => {
@@ -2004,23 +2005,49 @@ export const OrderTrackingPage = ({ orderData, setCurrentPage }) => {
               className="text-blue-400 hover:text-blue-300 mb-4 flex items-center space-x-2 mx-auto"
             >
               <ArrowRight className="w-4 h-4 rotate-180" />
-              <span>Back to exchange</span>
+              <span>{t('backToExchange')}</span>
             </button>
             
+            {/* Exchange Summary */}
             <div className="bg-gray-800 bg-opacity-50 backdrop-blur-xl rounded-2xl p-6 border border-gray-700 mb-6">
               <div className="flex items-center justify-center space-x-4 mb-4">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-orange-400">{orderData.sendAmount} {orderData.sendCurrency}</div>
-                  <div className="text-sm text-gray-400">YOU SEND</div>
+                  <div className="text-sm text-gray-400">{t('youSend')}</div>
                 </div>
                 <ArrowRight className="text-gray-400 w-6 h-6" />
                 <div className="text-center">
                   <div className="text-2xl font-bold text-blue-400">{orderData.receiveAmount} {orderData.receiveCurrency}</div>
-                  <div className="text-sm text-gray-400">YOU RECEIVE</div>
+                  <div className="text-sm text-gray-400">{t('youReceive')}</div>
                 </div>
               </div>
-              <div className="text-center text-gray-400 text-sm">
-                bc1qa46gek8s76v3652vx70xk6nlx7us7meln30vgl → rJQrESwxfZBfkGhfSXwPi7Kb9rU48ei
+              
+              {/* PROMINENT RECEIVING ADDRESS DISPLAY */}
+              <div className="bg-gray-700 bg-opacity-80 rounded-xl p-4 border-2 border-orange-500">
+                <div className="text-center mb-3">
+                  <div className="text-lg font-bold text-orange-400 mb-1">
+                    {t('sendInstruction')} {orderData.sendAmount} {orderData.sendCurrency} {t('toAddress')}
+                  </div>
+                  <div className="text-sm text-gray-300">
+                    Send your {orderData.sendCurrency} to this address:
+                  </div>
+                </div>
+                
+                <div className="bg-gray-900 rounded-lg p-4 border border-gray-600">
+                  <div className="flex items-center justify-between">
+                    <code className="text-blue-400 text-lg font-mono break-all pr-4">{orderData.receivingAddress}</code>
+                    <button className="flex-shrink-0 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg transition-colors flex items-center space-x-2">
+                      <Copy className="w-4 h-4" />
+                      <span className="text-sm">Copy</span>
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="text-center mt-3">
+                  <div className="text-sm text-yellow-400 font-medium">
+                    ⚠️ Only send {orderData.sendCurrency} to this address
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -2032,47 +2059,41 @@ export const OrderTrackingPage = ({ orderData, setCurrentPage }) => {
               <div className="bg-gray-800 bg-opacity-50 backdrop-blur-xl rounded-2xl p-6 border border-gray-700">
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   <div>
-                    <div className="text-sm text-gray-400 mb-1">Order ID</div>
+                    <div className="text-sm text-gray-400 mb-1">{t('orderId')}</div>
                     <div className="text-blue-400 font-mono flex items-center space-x-2">
                       <span>{orderData.id}</span>
                       <Copy className="w-4 h-4 cursor-pointer hover:text-blue-300" />
                     </div>
                   </div>
                   <div>
-                    <div className="text-sm text-gray-400 mb-1">Time remaining</div>
+                    <div className="text-sm text-gray-400 mb-1">{t('timeRemaining')}</div>
                     <div className="text-red-400 font-mono">{timeRemaining}</div>
                   </div>
                   <div>
-                    <div className="text-sm text-gray-400 mb-1">Order type</div>
+                    <div className="text-sm text-gray-400 mb-1">{t('orderType')}</div>
                     <div className="text-white">Float rate</div>
                   </div>
                   <div>
-                    <div className="text-sm text-gray-400 mb-1">Creation time</div>
+                    <div className="text-sm text-gray-400 mb-1">{t('creationTime')}</div>
                     <div className="text-white text-sm">{orderData.createdAt}</div>
                   </div>
                 </div>
 
-                {/* Send Instructions */}
+                {/* Additional Instructions */}
                 <div className="mb-6">
                   <div className="text-white font-semibold mb-3">
-                    Send <span className="text-orange-400">{orderData.sendAmount} {orderData.sendCurrency}</span> to the address:
+                    Instructions:
                   </div>
-                  <div className="bg-gray-700 rounded-lg p-4">
-                    <div className="flex items-center justify-between">
-                      <code className="text-blue-400 text-sm break-all">{orderData.receivingAddress}</code>
-                      <Copy className="w-4 h-4 text-gray-400 cursor-pointer hover:text-white ml-2" />
-                    </div>
-                  </div>
-                  <div className="text-sm text-gray-400 mt-2">
-                    Send your <span className="text-orange-400">{orderData.sendCurrency}</span> to this address. After receiving{' '}
-                    <span className="text-white">{orderData.networkConfirmations} network confirmations</span>, we will automatically convert and send{' '}
-                    <span className="text-blue-400">{orderData.receiveAmount} {orderData.receiveCurrency}</span> to your destination address.
+                  <div className="text-sm text-gray-300 leading-relaxed">
+                    Send exactly <span className="text-orange-400 font-semibold">{orderData.sendAmount} {orderData.sendCurrency}</span> to the address above. 
+                    After receiving <span className="text-white">{orderData.networkConfirmations} network confirmations</span>, we will automatically convert and send{' '}
+                    <span className="text-blue-400 font-semibold">{orderData.receiveAmount} {orderData.receiveCurrency}</span> to your destination address.
                   </div>
                 </div>
 
                 {/* Receiving Address */}
                 <div>
-                  <div className="text-sm text-gray-400 mb-2">Your {orderData.receiveCurrency} will be sent to</div>
+                  <div className="text-sm text-gray-400 mb-2">{t('yourTokensWillBeSent')} {orderData.receiveCurrency} {t('willBeSentTo')}</div>
                   <div className="bg-gray-700 rounded-lg p-4">
                     <div className="flex items-center justify-between">
                       <code className="text-blue-400 text-sm">{orderData.destinationAddress}</code>
@@ -2088,6 +2109,7 @@ export const OrderTrackingPage = ({ orderData, setCurrentPage }) => {
               {/* QR Code */}
               <div className="bg-gray-800 bg-opacity-50 backdrop-blur-xl rounded-2xl p-6 border border-gray-700 text-center">
                 <div className="mb-4">
+                  <div className="text-lg font-semibold text-white mb-3">Scan QR Code</div>
                   <img 
                     src={generateQRCode(orderData.receivingAddress)}
                     alt="QR Code"
