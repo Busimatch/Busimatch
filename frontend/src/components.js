@@ -1351,16 +1351,6 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
             />
           </div>
 
-          {/* Exchange Type */}
-          <div className="flex items-center justify-center space-x-4 mb-6">
-            <button className="px-6 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors">
-              Fixed rate (1.0%)
-            </button>
-            <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-              Float rate (0.5%)
-            </button>
-          </div>
-
           {/* Exchange Button */}
           <motion.button 
             whileHover={{ scale: 1.05 }}
