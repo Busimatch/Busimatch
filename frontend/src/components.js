@@ -774,19 +774,13 @@ export const Header = () => {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 rounded-full overflow-hidden">
-              <img 
-                src="https://i.imgur.com/9JQZ6vZ.png" 
-                alt="Busimatch Logo"
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  // Fallback to original B logo if image fails to load
-                  e.target.style.display = 'none';
-                  e.target.nextSibling.style.display = 'flex';
-                }}
-              />
-              <div className="w-10 h-10 bg-gradient-to-r from-orange-400 to-orange-600 rounded-lg flex items-center justify-center" style={{display: 'none'}}>
-                <span className="text-white font-bold text-sm">B</span>
+            <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-purple-600 to-blue-800 p-1">
+              <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
+                <div className="w-6 h-6 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full relative">
+                  <div className="absolute inset-1 bg-gradient-to-br from-blue-600 to-teal-500 rounded-full"></div>
+                  <div className="absolute top-0 left-1 w-1 h-3 bg-orange-400 rounded-full transform -rotate-12"></div>
+                  <div className="absolute top-0 right-1 w-1 h-3 bg-orange-400 rounded-full transform rotate-12"></div>
+                </div>
               </div>
             </div>
             <span className="text-2xl font-bold text-white">BUSIMATCH</span>
