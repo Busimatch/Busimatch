@@ -1963,9 +1963,9 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
           </motion.button>
 
           <p className="text-xs text-gray-400 mt-4 text-center">
-            By using the site and creating an exchange, you agree to the{' '}
-            <a href="#" className="text-blue-400 hover:text-blue-300">Terms of Service</a> and{' '}
-            <a href="#" className="text-blue-400 hover:text-blue-300">Privacy Policy</a>
+            {t('termsText')}{' '}
+            <a href="#" className="text-blue-400 hover:text-blue-300">{t('termsOfService')}</a> {t('and')}{' '}
+            <a href="#" className="text-blue-400 hover:text-blue-300">{t('privacyPolicy')}</a>
           </p>
         </motion.div>
       </div>
