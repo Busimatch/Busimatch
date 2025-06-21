@@ -1907,7 +1907,7 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
             {/* Receive Section */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-sm font-medium text-blue-400">Receive</label>
+                <label className="text-sm font-medium text-blue-400">{t('receive')}</label>
                 <span className="text-sm text-blue-400">{receiveCurrency}</span>
               </div>
               <div className="space-y-3">
