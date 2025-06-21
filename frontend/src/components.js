@@ -774,14 +774,12 @@ export const Header = () => {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-purple-600 to-blue-800 p-1">
-              <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
-                <div className="w-6 h-6 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full relative">
-                  <div className="absolute inset-1 bg-gradient-to-br from-blue-600 to-teal-500 rounded-full"></div>
-                  <div className="absolute top-0 left-1 w-1 h-3 bg-orange-400 rounded-full transform -rotate-12"></div>
-                  <div className="absolute top-0 right-1 w-1 h-3 bg-orange-400 rounded-full transform rotate-12"></div>
-                </div>
-              </div>
+            <div className="w-10 h-10 rounded-full overflow-hidden">
+              <img 
+                src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiMyRTM5NEEiLz4KPGVsbGlwc2UgY3g9IjIwIiBjeT0iMjMiIHJ4PSIxMiIgcnk9IjEwIiBmaWxsPSIjRjdGQUZDIi8+CjxlbGxpcHNlIGN4PSIxNCIgY3k9IjEyIiByeD0iMy41IiByeT0iMTAiIGZpbGw9IiNGNTcxNDMiIHRyYW5zZm9ybT0icm90YXRlKC0yMCAxNCAxMikiLz4KPGVsbGlwc2UgY3g9IjI2IiBjeT0iMTIiIHJ4PSIzLjUiIHJ5PSIxMCIgZmlsbD0iI0Y1NzE0MyIgdHJhbnNmb3JtPSJyb3RhdGUoMjAgMjYgMTIpIi8+CjxlbGxpcHNlIGN4PSIyMCIgY3k9IjIyIiByeD0iMTAiIHJ5PSI4IiBmaWxsPSIjMUU0MDVGIi8+CjxjaXJjbGUgY3g9IjEzIiBjeT0iMTgiIHI9IjIiIGZpbGw9IiNGNTcxNDMiLz4KPHBhdGggZD0iTTEwIDIyQzEwIDIwIDEyIDIwIDE0IDIwSDE2QzE4IDIwIDIwIDIwIDIwIDIyVjI0QzIwIDI2IDE4IDI2IDE2IDI2SDE0QzEyIDI2IDEwIDI2IDEwIDI0VjIyWiIgZmlsbD0iI0Y1NzE0MyIvPgo8L3N2Zz4K" 
+                alt="Busimatch Space Rabbit Logo"
+                className="w-full h-full object-cover"
+              />
             </div>
             <span className="text-2xl font-bold text-white">BUSIMATCH</span>
           </div>
