@@ -1357,6 +1357,12 @@ export const Header = () => {
     { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
     { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
     { code: 'it', name: 'Italiano', flag: '🇮🇹' },
+    { code: 'sv', name: 'Svenska', flag: '🇸🇪' },
+    { code: 'no', name: 'Norsk', flag: '🇳🇴' },
+    { code: 'ru', name: 'Русский', flag: '🇷🇺' },
+    { code: 'zh', name: '中文', flag: '🇨🇳' },
+    { code: 'ja', name: '日本語', flag: '🇯🇵' },
+    { code: 'pt', name: 'Português', flag: '🇵🇹' },
     { code: 'ar', name: 'العربية', flag: '🇸🇦' }
   ];
 
