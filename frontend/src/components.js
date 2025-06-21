@@ -1958,7 +1958,7 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
             onClick={handleExchange}
             className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2"
           >
-            <span>Exchange now</span>
+            <span>{t('exchangeNow')}</span>
             <ArrowRight className="w-5 h-5" />
           </motion.button>
 
