@@ -1856,7 +1856,7 @@ export const HeroSection = ({ setCurrentPage, setOrderData }) => {
             {/* Send Section */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-sm font-medium text-orange-400">Send</label>
+                <label className="text-sm font-medium text-orange-400">{t('send')}</label>
                 <span className="text-sm text-orange-400">{sendCurrency}</span>
               </div>
               <div className="space-y-3">
