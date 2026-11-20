@@ -3,7 +3,7 @@
 **One ID. One ecosystem for small businesses, creators and communities.**
 
 BusiMatch is a family of connected platforms, built in Belgium.
-You sign in once with your BusiMatch ID and use everything: a community, a design studio, free online tools, a website builder and an academy.
+You sign in once with your BusiMatch ID and use everything: a community, a design studio, free online tools, online shops, a website builder and an academy.
 
 This profile is a showcase.
 It explains what BusiMatch is and how the parts fit together.
@@ -17,6 +17,7 @@ The source code is not published here.
 | [busimatch.club](https://busimatch.club) | The community and the back office: your profile, your businesses, blog, chat and wallet. |
 | [busimatch.tools](https://busimatch.tools) | More than 360 online tools and plugins, each one standalone. |
 | [busimatch.studio](https://busimatch.studio) | Busi Studio: design personalised products such as business cards, flyers, posters and clothing. |
+| [busimatch.store](https://busimatch.store) | Busi Stores: open your own online shop for free. |
 | [busimatch.online](https://busimatch.online) | Busi Online: build your own website without code. |
 | [busimatch.academy](https://busimatch.academy) | BusiMatch Academy: learn, teach and grow. |
 | [busiverse.network](https://busiverse.network) | The Busiverse: the overview of the whole ecosystem. |
